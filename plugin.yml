@@ -1,0 +1,20 @@
+name: Template
+main: org.Dragonphase.Template.Template
+version: 1.0
+website: http://dragonphase.com/
+depend: []
+description: >
+             Template description
+commands:
+  template:
+    description: Template help
+permissions:
+  template.default:
+    description: everyone gets this permission node
+    default: true
+  template.nodefault:
+    description: Nobody gets this permission node
+    default: false
+  template.op:
+    description: Ops get this permission node
+    default: op
