@@ -1,0 +1,194 @@
+# ----------------------------------------------------- #
+# Battlegear - Ladder & Item Configuration              #
+# ----------------------------------------------------- #
+# This file is used to store all of the Battlegear's    #
+# references to items and their corresponding defined   #
+# ladders.                                              #
+#                                                       #
+# A Ladder is a group in which items are distributed;   #
+# Each ladder can have its own item name color, item    #
+# lore color and drop chance (So you can have junk      #
+# items which drop frequently and legendary items which #
+# drop rarely).                                         #
+#                                                       #
+# ----------------------------------------------------- #
+# You can only use color on items if it's leather.      #
+# Apply the following to the options of the item:       #
+#     color: 255,255,255   # (red,green,blue)           #
+# This example will color the item white.               #
+# ----------------------------------------------------- #
+# Enchantments                                          #
+# ----------------------------------------------------- #
+# See the following page for a list of enchantments:    #
+#                                                       #
+# dev.bukkit.org/server-mods/battlegear/pages/enchants  #
+#                                                       #
+# ----------------------------------------------------- #
+# Potion Effects                                        #
+# ----------------------------------------------------- #
+# See the following page for a list of potion effects:  #
+#                                                       #
+# dev.bukkit.org/server-mods/battlegear/pages/potions   #
+#                                                       #
+# ----------------------------------------------------- #
+# About maximum-chance                                  #
+# ----------------------------------------------------- #
+# Maximum chance is the plugin's global maximum chance  #
+# variable. Think of it kind of like a percentage.      #
+# If you have a maximum chance of 100, and the junk     #
+# ladder has a chance of 15, that means any item in the #
+# junk ladder has a 15% chance to drop...               #
+# (if the item doesn't have a custom chance variable)   #
+#                                                       #
+# Chance is also used for critical hits in the same way #
+#                                                       #
+# ----------------------------------------------------- #
+# About Mobs & Customising them                         #
+# ----------------------------------------------------- #
+#                                                       #
+# Provided below is a template for you to use. Please   #
+# note that currently, items specified MUST be          #
+# incremental like so:                                  #
+#                                                       #
+# 1:                                                    #
+#   name: ...                                           #
+#   ladder: ...                                         #
+#   ...                                                 #
+# 2:                                                    #
+#   name: ...                                           #
+#   ladder: ...                                         #
+#   ...                                                 #
+# 3:                                                    #
+#   name: ...                                           #
+#   ladder: ...                                         #
+#   ...                                                 #
+#                                                       #
+# All chat color codes work for item name and lore,     #
+# however you must encapsulate text in single quotes    #
+# when using them ('&aItem Name')                       #
+#                                                       #
+# Finally, if you have essentials god-mode on, this     #
+# will make the damage modifiers of Battlegear          #
+# inoperable. Disable godmode for your players for it   #
+# to work correctly.                                    #
+#                                                       #
+# ----------------------------------------------------- #
+# Salvaging Items                                       #
+# ----------------------------------------------------- #
+# Items with the salvage section can be salvaged for    #
+# the blocks that are specified in that section. For    #
+# example:                                              #
+#                                                       #
+# salvage:                                              #
+# - 3x5                                                 #
+# - 4                                                   #
+#                                                       #
+# This will salvage the item for 3 wood and 1 cobble.   #
+# If an item is in a ladder with junk:true, it will not #
+# ask for confirmation when salvaging.                  #
+# ----------------------------------------------------- #
+
+ladder:
+  junk:
+    color: '&7'
+    lore: '&8'
+    chance: 20000
+    junk: true
+  common:
+    color: '&f'
+    lore: '&8'
+    chance: 8000
+    junk: true
+  uncommon:
+    color: '&a'
+    lore: '&8'
+    chance: 3500
+    junk: false
+  rare:
+    color: '&9'
+    lore: '&8'
+    chance: 1000
+    junk: false
+  epic:
+    color: '&5'
+    lore: '&b'
+    chance: 100
+    junk: false
+  legendary:
+    color: '&6'
+    lore: '&b'
+    chance: 10
+    junk: false
+items:
+  '1':
+    name: Training Sword
+    ladder: junk
+    lore:
+    - Not intended for proper combat situations.
+    id: 268
+    type: weapon
+    stats:
+      damage: 60-70
+      crit-chance: 0
+      enchantments:
+      - KNOCKBACK 1
+      - LOOT_BONUS_MOBS 1
+    mobs:
+    - zombie
+    - villager
+    - pigzombie
+    salvage:
+    - 280
+    - 3x4
+  '2':
+    name: Wooden Hook
+    ladder: junk
+    lore:
+    - A fragile but effective complement
+    - to one's arsenal.
+    id: 290
+    type: weapon
+    stats:
+      damage: 10-20
+      durability: 30
+      crit-chance: 0
+      enchantments:
+      - KNOCKBACK 2
+    mobs:
+    - villager
+    - pigzombie
+    blocks:
+    - 17
+  '3':
+    name: Fireproof Chest
+    ladder: uncommon
+    lore:
+    - Attire of the devil
+    id: 299
+    color: 255,0,0
+    chance: 10000
+    type: armor
+    stats:
+      armor: 200
+      enchantments:
+      - PROTECTION_FIRE 10
+    mobs:
+    - blaze
+    - magmacube
+  '4':
+    name: Sugarblast
+    ladder: rare
+    lore:
+    - Hyperintensive stimulation...
+    id: 353
+    type: weapon
+    stats:
+      damage: 100-115
+      durability: 80
+      enchantments:
+      - LOOT_BONUS_MOBS 5
+      effects:
+      - 'a:SPEED 3'
+      - 'v:SPEED 6'
+    mobs:
+    - slime

@@ -1,20 +1,21 @@
-name: Template
-main: org.Dragonphase.Template.Template
-version: 1.0
+name: Battlegear
+main: org.Dragonphase.Battlegear.Battlegear
+version: 1.01
 website: http://dragonphase.com/
 depend: []
 description: >
-             Template description
+             Battlegear allows you to create statistics for weapons and armor, as well as create custom weapon tiers (such as Common, Uncommon, Rare, Epic, Legendary) and custom mob drops (based on the tiers).
 commands:
-  template:
-    description: Template help
+  bg:
+    description: Battlegear help
+  gear:
+    description: Used to retrieve items ingame
+  salvage:
+    description: Allows you to slavage items
 permissions:
-  template.default:
-    description: everyone gets this permission node
-    default: true
-  template.nodefault:
-    description: Nobody gets this permission node
-    default: false
-  template.op:
-    description: Ops get this permission node
+  battlegear.reload:
+    description: Allows players to reload Battlegear
+    default: op
+  battlegear.spawn:
+    description: Allows players to retrieve items ingame
     default: op
