@@ -1,16 +1,16 @@
-package org.Dragonphase.Template.Commands;
+package org.Dragonphase.Kits.Commands;
 
-import org.Dragonphase.Template.Template;
-import org.Dragonphase.Template.Util.Message;
+import org.Dragonphase.Kits.Kits;
+import org.Dragonphase.Kits.Util.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class TemplateCommandExecutor implements CommandExecutor{
+public class KitsCommandExecutor implements CommandExecutor{
 	
-	private Template plugin;
+	private Kits plugin;
 
-	public TemplateCommandExecutor(Template template) {
+	public KitsCommandExecutor(Kits template) {
 		plugin = template;
 	}
 
@@ -18,7 +18,7 @@ public class TemplateCommandExecutor implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
 		if (args.length > 0){
 			if (args[0].startsWith("r")){
-				if (sender.hasPermission("template.op")){
+				if (sender.hasPermission("kits.reload")){
 					try {
 						plugin.reload();
 						sender.sendMessage(Message.info("Reloaded."));

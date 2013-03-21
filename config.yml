@@ -1,130 +1,66 @@
-# ----------------------------------------------------- #
-# Battlegear - Main Configuration                       #
-# ----------------------------------------------------- #
-# Battlegear allows you to create your own items and    #
-# allow them to be dropped by certain mobs or blocks.   #
-# Items can belong to a certain ladder or be completely #
-# unique. Items in ladders will have their ladder name  #
-# specified in it's tooltip, unless it has its own      #
-# unique drop chance.                                   #
-#                                                       #
-# You are able to create an unlimited (within reason)   #
-# number of ladders and items, each with their own drop #
-# chance, item name color, item lore color, etc.        #
-#                                                       #
-# Battlegear has a set of options that are configurable #
-# such as specifiying the world(s) to run Battlegear in #
-# and allowing you to edit mob health, damage and crit  #
-# chance. You may also change the default damage, max   #
-# health and crit chance of players, which will change  #
-# depending on what the player is using as a weapon or  #
-# wearing as armor.                                     #
-#                                                       #
-# This file is used to store global plugin options. To  #
-# create your own ladders and items, edit the gear.yml  #
-# file.                                                 #
-#                                                       #
-# ----------------------------------------------------- #
-# About maximum-chance                                  #
-# ----------------------------------------------------- #
-# Maximum chance is the plugin's global maximum chance  #
-# variable. Think of it kind of like a percentage.      #
-# If you have a maximum chance of 100, and the junk     #
-# ladder has a chance of 15, that means any item in the #
-# junk ladder has a 15% chance to drop...               #
-# (if the item doesn't have a custom chance variable)   #
-#                                                       #
-# Chance is also used for critical hits in the same way #
-#                                                       #
-# ----------------------------------------------------- #
-# About Mobs & Customising them                         #
-# ----------------------------------------------------- #
-# Mobs that are not defined in the options section will #
-# automatically use the default-damage,                 #
-# default-crit-chance and max-health from the options   #
-# section. To add a mob for customisation, simply add   #
-# its name in the options.mobs section like so:         #
-#                                                       #
-#   mobs:                                               #
-#     cavespider:                                       #
-#       max-health: 350                                 #
-#       default-damage: 25-35                           #
-#       crit-chance: 60000                              #
-#                                                       #
-# ----------------------------------------------------- #
-# List of Mobs                                          #
-# ----------------------------------------------------- #
-# See the following page for a list of mobs:            #
-#                                                       #
-# dev.bukkit.org/server-mods/battlegear/pages/mobs      #
-# ----------------------------------------------------- #
-# That's the end of the configuration help section. If  #
-# you find something wrong with the plugin, refer to    #
-# the plugin post at:                                   #
-# dev.bukkit.org/server-mods/battlegear                 #
-#                                                       #
-# If there is nothing in the post that can help you,    #
-# leave a comment in the comments section or submit a   #
-# ticket.                                               #
-# ----------------------------------------------------- #
-
-options:
-  maximum-chance: 100000
-  default-damage: 35-40
-  default-crit-chance: 25000
-  max-health: 500
-  mobs:
-    zombie:
-      max-health: 500
-      default-damage: 45-70
-      crit-chance: 30000
-    skeleton:
-      max-health: 500
-      default-damage: 45-70
-      crit-chance: 30000
-    creeper:
-      max-health: 400
-      default-damage: 90-115
-      crit-chance: 30000
-    spider:
-      max-health: 400
-      default-damage: 30-45
-      crit-chance: 40000
-    wolf:
-      max-health: 350
-      default-damage: 25-40
-      crit-chance: 40000
-    pig:
-      max-health: 300
-    sheep:
-      max-health: 300
-    cow:
-      max-health: 350
-    chicken:
-      max-health: 200
-  items:
-    wood:
-      tool: 30-40
-      sword: 55-70
-      crit-chance: 25000
-    stone:
-      tool: 45-60
-      sword: 65-80
-      crit-chance: 20000
-    iron:
-      tool: 70-85
-      sword: 90-105
-      crit-chance: 15000
-    diamond:
-      tool: 100-115
-      sword: 120-135
-      crit-chance: 10000
-    gold:
-      tool: 195-215
-      sword: 220-245
-      crit-chance: 5000
-    bow:
-      damage: 40-55
-      crit-chance: 40000
-  worlds:
-  - world
+kits:
+  miner:
+    items:
+      274: 1
+      263: 8
+  butcher:
+    items:
+      268:
+        enchantments:
+        - LOOT 3
+  farmer:
+    items:
+      351:
+        amount: 32
+        data: 15
+  guard:
+    items:
+      299: 1
+      283: 1
+  archer:
+    items:
+      261: 1
+      262: 64
+  wizard:
+    items:
+      280:
+        enchantments:
+        - KNOCKBACK 2
+      368: 5
+      373:
+        amount: 3
+        data: 8197
+  spy:
+    items:
+      373:
+        amount: 3
+        data: 8206
+  vampire:
+    items:
+      359:
+        enchantments:
+        - DAMAGE_ALL 2
+        - LEECH
+  goblin:
+    items:
+      399: 1
+      373:
+        data: 8265
+      373:
+        amount: 5
+        data: 16428
+  pyro:
+    items:
+      268:
+        enchantments:
+        - FIRE_ASPECT 1
+      261:
+        enchantments:
+        - ARROW_FIRE 1
+      262: 8
+  iron:
+    items:
+      306: 1
+      307: 1
+      308: 1
+      309: 1

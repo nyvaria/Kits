@@ -1,4 +1,4 @@
-package org.Dragonphase.Template.Util;
+package org.Dragonphase.Kits.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,17 +7,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.Dragonphase.Template.Template;
+import org.Dragonphase.Kits.Kits;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class FileManager{
     public final Logger logger = Logger.getLogger("Minecraft");
-    private Template plugin;
+    private Kits plugin;
     private YamlConfiguration fileManager;
     private String fileName;
     
-    public FileManager(Template instance, String filename){
+    public FileManager(Kits instance, String filename){
         plugin = instance;
         fileName = filename;
         saveFile();

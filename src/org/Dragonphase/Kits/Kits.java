@@ -1,17 +1,18 @@
-package org.Dragonphase.Template;
+package org.Dragonphase.Kits;
 
 import java.util.logging.Logger;
 
-import org.Dragonphase.Template.Util.FileManager;
-import org.Dragonphase.Template.Util.Message;
-import org.Dragonphase.Template.Commands.TemplateCommandExecutor;
-import org.Dragonphase.Template.Listeners.EventListener;
+import org.Dragonphase.Kits.Commands.KitCommandExecutor;
+import org.Dragonphase.Kits.Commands.KitsCommandExecutor;
+import org.Dragonphase.Kits.Listeners.EventListener;
+import org.Dragonphase.Kits.Util.FileManager;
+import org.Dragonphase.Kits.Util.Message;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Template extends JavaPlugin{
+public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
-	public static Template plugin;
-	public FileManager configurationFile;
+	public static Kits plugin;
+	public static FileManager configurationFile;
 	
 	@Override
 	public void onDisable(){
@@ -27,8 +28,9 @@ public class Template extends JavaPlugin{
 		configurationFile = new FileManager(this, "config.yml");
 		
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
-		
-		getCommand("template").setExecutor(new TemplateCommandExecutor(this));
+
+        getCommand("kits").setExecutor(new KitsCommandExecutor(this));
+        getCommand("kit").setExecutor(new KitCommandExecutor(this));
 	}
 	
 	public void reload(){

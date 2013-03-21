@@ -1,13 +1,13 @@
-package org.Dragonphase.Template.Util;
+package org.Dragonphase.Kits.Util;
 
-import org.Dragonphase.Template.Template;
+import org.Dragonphase.Kits.Kits;
 import org.bukkit.ChatColor;
 
 public class Message {
 
-	public static Template plugin;
+	public static Kits plugin;
 	
-	public static void setParent(Template instance){
+	public static void setParent(Kits instance){
 		plugin = instance;
 	}
 	
