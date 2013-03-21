@@ -2,11 +2,10 @@ package org.Dragonphase.Template;
 
 import java.util.logging.Logger;
 
+import org.Dragonphase.Template.Util.FileManager;
+import org.Dragonphase.Template.Util.Message;
 import org.Dragonphase.Template.Commands.TemplateCommandExecutor;
 import org.Dragonphase.Template.Listeners.EventListener;
-import org.Dragonphase.Template.Util.FileManager;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Template extends JavaPlugin{
@@ -16,25 +15,25 @@ public class Template extends JavaPlugin{
 	
 	@Override
 	public void onDisable(){
-		PluginDescriptionFile PDF = this.getDescription();
-		logger.info(PDF.getName() + " disabled.");
+		logger.info(Message.message("Version " + getPluginVersion() + " disabled."));
 	}
 
 	@Override
 	public void onEnable(){
-		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		Message.setParent(this);
+		logger.info(Message.message("Version " + getPluginVersion() + " enabled."));
 		
 		saveDefaultConfig();
 		configurationFile = new FileManager(this, "config.yml");
 		
-		getCommand("template").setExecutor(new TemplateCommandExecutor(this));
+		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		
-		logger.info(pluginMessageFormat("Version " + getPluginVersion() + " enabled."));
+		getCommand("template").setExecutor(new TemplateCommandExecutor(this));
 	}
 	
 	public void reload(){
 		reloadConfig();
-		configurationFile.loadFile("config.yml");
+		configurationFile.loadFile();
 	}
 	
 	public String getPluginDetails(){
@@ -47,9 +46,5 @@ public class Template extends JavaPlugin{
 	
 	public String getPluginVersion(){
 		return getDescription().getVersion();
-	}
-	
-	public String pluginMessageFormat(String message){
-		return ChatColor.DARK_GRAY + getPluginName() + ": " + ChatColor.GRAY + message;
 	}
 }
