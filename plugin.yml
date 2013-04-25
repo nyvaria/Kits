@@ -1,6 +1,6 @@
 name: Kits
 main: org.Dragonphase.Kits.Kits
-version: 1.01
+version: 1.2
 website: http://dragonphase.com/
 depend: []
 description: >
@@ -11,6 +11,6 @@ commands:
   kit:
     description: Kits help
 permissions:
-  kits.reload:
+  kits.admin:
     description: Allows players to reload Kits
     default: op

@@ -1,42 +1,68 @@
 package org.Dragonphase.Kits.Listeners;
 
 import java.util.logging.Logger;
-
 import org.Dragonphase.Kits.Kits;
-import org.Dragonphase.Kits.Util.Kit;
+import org.Dragonphase.Kits.Util.Message;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
-public class EventListener implements Listener{
-	public final Logger logger = Logger.getLogger("Minecraft");
-	public static Kits plugin;
+public class EventListener implements Listener
+{
+    public final Logger logger = Logger.getLogger("Minecraft");
+    public static Kits plugin;
 
-	public EventListener(Kits instance){
-		plugin = instance;
-	}
-	
-	@EventHandler
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
-        if (!(event.getDamager() instanceof Player)) return;
-        if (!(event.getEntity() instanceof Player)) return;
-        
-        Player attacker = (Player)event.getDamager();
-        
-        if (Kit.getLeech(attacker.getItemInHand()) != 0){
-            try{
-                attacker.setHealth(attacker.getHealth() + event.getDamage());
-            }catch (Exception ex){
-                attacker.setHealth(attacker.getMaxHealth());
+    public EventListener(Kits instance)
+    {
+        plugin = instance;
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
+        player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
+        Player player = (Player)event.getPlayer();
+        try
+        {
+            if (((MetadataValue)player.getMetadata("editingKit").get(0)).asBoolean()) {
+                String kit = inventory.getTitle();
+                
+                for (int i = 0; i < inventory.getContents().length; i ++){
+                    Kits.configurationFile.set(kit + "." + i, inventory.getItem(i), false);
+                }
+                
+                player.sendMessage(Message.info("Kit " + kit + " has been updated."));
+                player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
+                
+                Kits.configurationFile.loadFile();
+            }
+            if (((MetadataValue)player.getMetadata("creatingKit").get(0)).asBoolean()) {
+                String kit = inventory.getTitle();
+                
+                for (int i = 0; i < inventory.getContents().length; i ++){
+                    Kits.configurationFile.set(kit + "." + i, inventory.getItem(i), false);
+                }
+                
+                player.sendMessage(Message.info("Kit " + kit + " has been created."));
+                player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
+                
+                Kits.configurationFile.loadFile();
             }
         }
-	}
-	
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event){
-        event.getEntity().setMetadata("kit", new FixedMetadataValue(plugin, false));
-	}
+        catch (Exception ex)
+        {
+            logger.info(ex.getLocalizedMessage());
+        }
+    }
 }

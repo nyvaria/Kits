@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import org.Dragonphase.Kits.Kits;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 public class FileManager{
     public final Logger logger = Logger.getLogger("Minecraft");
@@ -167,5 +168,9 @@ public class FileManager{
     public List<Map<?,?>> getMapList(String path, boolean load){
         if (load) loadFile();
         return fileManager.getMapList(path);
+    }
+    
+    public ItemStack getItemStack(String path){
+        return fileManager.getItemStack(path);
     }
 }

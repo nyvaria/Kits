@@ -3,8 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="C:/Users/Dragonphase/Dragonphase/Minecraft/Plugins/Test Server/craftbukkit.jar" sourcepath="C:/Users/Dragonphase/Dragonphase/Minecraft/Plugins/Bukkit-Bukkit-1.4.7-R1.0-2-g23f5a05.zip"/>
-	<classpathentry kind="lib" path="C:/Users/Dragonphase/Dragonphase/Minecraft/Plugins/Test Server/plugins/WorldGuard.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Dragonphase/Dragonphase/Minecraft/Plugins/Test Server/plugins/WorldEdit.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Dragonphase/Dragonphase/Minecraft/Plugins/Test Server/plugins/Vault.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

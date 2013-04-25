@@ -18,7 +18,7 @@ public class KitsCommandExecutor implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
 		if (args.length > 0){
 			if (args[0].startsWith("r")){
-				if (sender.hasPermission("kits.reload")){
+				if (sender.hasPermission("kits.admin")){
 					try {
 						plugin.reload();
 						sender.sendMessage(Message.info("Reloaded."));
@@ -30,7 +30,18 @@ public class KitsCommandExecutor implements CommandExecutor{
 				}
 			}
 		}else{
-			sender.sendMessage(Message.info("Version " +  plugin.getPluginVersion() + "."));
+		    String kits = "";
+		    for (String string : Kits.configurationFile.getKeys(false)){
+		        kits += string + ", ";
+		    }
+            if (kits != "" || !kits.isEmpty()){
+                sender.sendMessage(Message.info("Version " +  plugin.getPluginVersion() + ":"));
+                
+                kits = kits.substring(0, kits.length()-2);
+                sender.sendMessage(Message.info(kits));
+            }else{
+                sender.sendMessage(Message.info("Version " +  plugin.getPluginVersion() + "."));
+            }
 		}
 		return false;
 	}
