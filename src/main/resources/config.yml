@@ -1,0 +1,19 @@
+#--------------------------------------#
+#          Kits Configuration          #
+#--------------------------------------#
+# Nothing here, because I haven't had  #
+# time to add customisable options yet #
+#                                      #
+# But feel free to make a request and  #
+# I will see what I can do about it!   #
+#--------------------------------------#
+# By the way, all kits are stored in   #
+# kits.yml - you shouldnt edit this    #
+# file unless you know what you're     #
+# doing, and I recommend you create    #
+# and edit kits in-game as its easier. #
+#--------------------------------------#
+
+options:
+  because:
+    racecar: true

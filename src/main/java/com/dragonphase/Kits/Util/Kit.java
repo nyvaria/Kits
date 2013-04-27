@@ -1,12 +1,13 @@
-package org.Dragonphase.Kits.Util;
+package com.dragonphase.Kits.Util;
 
 import java.util.ArrayList;
 
-import org.Dragonphase.Kits.Kits;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+
+import com.dragonphase.Kits.Kits;
 
 public class Kit {
     

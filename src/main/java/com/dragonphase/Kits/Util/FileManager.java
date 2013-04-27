@@ -1,4 +1,4 @@
-package org.Dragonphase.Kits.Util;
+package com.dragonphase.Kits.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,10 +7,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.Dragonphase.Kits.Kits;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import com.dragonphase.Kits.Kits;
 
 public class FileManager{
     public final Logger logger = Logger.getLogger("Minecraft");

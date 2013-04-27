@@ -1,5 +1,5 @@
 name: Kits
-main: org.Dragonphase.Kits.Kits
+main: com.dragonphase.Kits.Kits
 version: 1.2.2
 website: http://dragonphase.com/
 depend: []
