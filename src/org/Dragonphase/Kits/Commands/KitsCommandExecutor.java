@@ -31,7 +31,7 @@ public class KitsCommandExecutor implements CommandExecutor{
 			}
 		}else{
 		    String kits = "";
-		    for (String string : Kits.configurationFile.getKeys(false)){
+		    for (String string : Kits.kitsFile.getKeys(false)){
 		        kits += string + ", ";
 		    }
             if (kits != "" || !kits.isEmpty()){

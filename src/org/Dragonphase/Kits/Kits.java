@@ -12,7 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
 	public static Kits plugin;
-	public static FileManager configurationFile;
+    public static FileManager configurationFile;
+    public static FileManager kitsFile;
 	
 	@Override
 	public void onDisable(){
@@ -25,8 +26,9 @@ public class Kits extends JavaPlugin{
 		logger.info(Message.message("Version " + getPluginVersion() + " enabled."));
 		
 		saveDefaultConfig();
-		configurationFile = new FileManager(this, "config.yml");
-		
+        configurationFile = new FileManager(this, "config.yml");
+        kitsFile = new FileManager(this, "kits.yml");
+        
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
         getCommand("kits").setExecutor(new KitsCommandExecutor(this));
@@ -36,6 +38,7 @@ public class Kits extends JavaPlugin{
 	public void reload(){
 		reloadConfig();
 		configurationFile.loadFile();
+		kitsFile.loadFile();
 	}
 	
 	public String getPluginDetails(){

@@ -173,4 +173,8 @@ public class FileManager{
     public ItemStack getItemStack(String path){
         return fileManager.getItemStack(path);
     }
+    
+    public List<?> getList(String path){
+        return fileManager.getList(path);
+    }
 }

@@ -1,66 +1,19 @@
-kits:
-  miner:
-    items:
-      274: 1
-      263: 8
-  butcher:
-    items:
-      268:
-        enchantments:
-        - LOOT 3
-  farmer:
-    items:
-      351:
-        amount: 32
-        data: 15
-  guard:
-    items:
-      299: 1
-      283: 1
-  archer:
-    items:
-      261: 1
-      262: 64
-  wizard:
-    items:
-      280:
-        enchantments:
-        - KNOCKBACK 2
-      368: 5
-      373:
-        amount: 3
-        data: 8197
-  spy:
-    items:
-      373:
-        amount: 3
-        data: 8206
-  vampire:
-    items:
-      359:
-        enchantments:
-        - DAMAGE_ALL 2
-        - LEECH
-  goblin:
-    items:
-      399: 1
-      373:
-        data: 8265
-      373:
-        amount: 5
-        data: 16428
-  pyro:
-    items:
-      268:
-        enchantments:
-        - FIRE_ASPECT 1
-      261:
-        enchantments:
-        - ARROW_FIRE 1
-      262: 8
-  iron:
-    items:
-      306: 1
-      307: 1
-      308: 1
-      309: 1
+#--------------------------------------#
+#          Kits Configuration          #
+#--------------------------------------#
+# Nothing here, because I haven't had  #
+# time to add customisable options yet #
+#                                      #
+# But feel free to make a request and  #
+# I will see what I can do about it!   #
+#--------------------------------------#
+# By the way, all kits are stored in   #
+# kits.yml - you shouldnt edit this    #
+# file unless you know what you're     #
+# doing, and I recommend you create    #
+# and edit kits in-game as its easier. #
+#--------------------------------------#
+
+options:
+  because:
+    racecar: true

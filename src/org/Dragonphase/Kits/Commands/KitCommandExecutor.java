@@ -28,7 +28,7 @@ public class KitCommandExecutor implements CommandExecutor{
 	    if (args.length == 0){
 	        player.sendMessage(Message.info("/kit <kitname|create|edit|remove>"));
 	    }else{
-	        String arg = args[0].toLowerCase();
+	        String arg = args[0];
 	        
 	        if (args.length == 1){
                 if (arg.equalsIgnoreCase("create")){
@@ -72,7 +72,7 @@ public class KitCommandExecutor implements CommandExecutor{
 	                    }
 	                }else if (arg.equalsIgnoreCase("remove")){
                         if (Kit.exists(args[1])){
-                            Kits.configurationFile.set(args[1], null, false);
+                            Kits.kitsFile.set(args[1], null, false);
                             player.sendMessage(Message.info("Kit " + args[1] + " has been removed."));
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));

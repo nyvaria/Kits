@@ -38,26 +38,22 @@ public class EventListener implements Listener
             if (((MetadataValue)player.getMetadata("editingKit").get(0)).asBoolean()) {
                 String kit = inventory.getTitle();
                 
-                for (int i = 0; i < inventory.getContents().length; i ++){
-                    Kits.configurationFile.set(kit + "." + i, inventory.getItem(i), false);
-                }
+                Kits.kitsFile.set(kit, inventory.getContents(), false);
                 
                 player.sendMessage(Message.info("Kit " + kit + " has been updated."));
                 player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
                 
-                Kits.configurationFile.loadFile();
+                Kits.kitsFile.loadFile();
             }
             if (((MetadataValue)player.getMetadata("creatingKit").get(0)).asBoolean()) {
                 String kit = inventory.getTitle();
                 
-                for (int i = 0; i < inventory.getContents().length; i ++){
-                    Kits.configurationFile.set(kit + "." + i, inventory.getItem(i), false);
-                }
+                Kits.kitsFile.set(kit, inventory.getContents(), false);
                 
                 player.sendMessage(Message.info("Kit " + kit + " has been created."));
                 player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
                 
-                Kits.configurationFile.loadFile();
+                Kits.kitsFile.loadFile();
             }
         }
         catch (Exception ex)

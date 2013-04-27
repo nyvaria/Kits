@@ -12,19 +12,16 @@ public class Kit {
     
     public static boolean exists(String kitName){
         boolean exists = false;
-        for (String key : Kits.configurationFile.getKeys(false)){
+        for (String key : Kits.kitsFile.getKeys(false)){
             if (key.equals(kitName)) exists = true;
         }
         return exists;
     }
-	
-	public static ArrayList<ItemStack> getKit(String kitName){
-	    ArrayList<ItemStack> kit = new ArrayList<ItemStack>();
-	    for (int i = 0; i < 10; i ++){
-	        kit.add(Kits.configurationFile.getItemStack(kitName + "." + i));
-	    }
-	    return kit;
-	}
+    
+    @SuppressWarnings("unchecked")
+    public static ArrayList<ItemStack> getKit(String kitName){
+        return (ArrayList<ItemStack>) Kits.kitsFile.getList(kitName);
+    }
 
     public static void create(Plugin plugin, Player player, String kitName) {
         Inventory inventory = plugin.getServer().createInventory(player, 9, kitName);
@@ -34,9 +31,9 @@ public class Kit {
     public static void edit(Plugin plugin, Player player, String kitName) {
         Inventory inventory = plugin.getServer().createInventory(player, 9, kitName);
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 9; i++) {
             try{
-                inventory.setItem(i, Kits.configurationFile.getItemStack(kitName + "." + i));
+                inventory.setItem(i, getKit(kitName).get(i));
             }catch (Exception ex){
                 continue;
             }
@@ -46,6 +43,6 @@ public class Kit {
     }
     
     public static int kitSize(String kit){
-        return Kits.configurationFile.getConfigurationSection(kit).getKeys(false).size();
+        return Kits.kitsFile.getConfigurationSection(kit).getKeys(false).size();
     }
 }
