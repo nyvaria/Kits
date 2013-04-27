@@ -1,7 +1,6 @@
 package com.dragonphase.Kits.Commands;
 
-import java.util.ArrayList;
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,9 +40,9 @@ public class KitCommandExecutor implements CommandExecutor{
                 }else{
                     if (player.hasPermission("kits.spawn." + arg)){
                         if (Kit.exists(arg)){
-                            ArrayList<ItemStack> itemList = Kit.getKit(arg);
-                            for (int i = 0; i < itemList.size(); i ++){
-                                player.getInventory().setItem(i, itemList.get(i));
+                            ItemStack[] itemList = Kit.getKit(arg);
+                            for (int i = 0; i < itemList.length; i ++){
+                                player.getInventory().setItem(i, itemList[i]);
                             }
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
                         }else{
@@ -54,8 +53,8 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }
 	        }else if (args.length > 1){
-	            if (player.hasPermission("kits.admin")){
-	                if (arg.equalsIgnoreCase("create")){
+	            if (arg.equalsIgnoreCase("create")){
+	                if (player.hasPermission("kits.admin")){
                         if (!Kit.exists(args[1])){
                             Kit.create(plugin, player, args[1]);
                             player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
@@ -63,28 +62,55 @@ public class KitCommandExecutor implements CommandExecutor{
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " already exists."));
                         }
-	                }else if (arg.equalsIgnoreCase("edit")){
-	                    if (Kit.exists(args[1])){
-	                        Kit.edit(plugin, player, args[1]);
-	                        player.setMetadata("editingKit", new FixedMetadataValue(plugin, true));
-	                        player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
-	                    }else{
-	                        player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
-	                    }
-	                }else if (arg.equalsIgnoreCase("remove")){
+	                }else{
+	                    sender.sendMessage(Message.warning("Incorrect Permissions."));
+	                }
+	            }else if (arg.equalsIgnoreCase("edit")){
+                    if (player.hasPermission("kits.admin")){
+    	                if (Kit.exists(args[1])){
+                            Kit.edit(plugin, player, args[1]);
+                            player.setMetadata("editingKit", new FixedMetadataValue(plugin, true));
+                            player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
+                        }else{
+                            player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
+                        }
+                    }else{
+                        sender.sendMessage(Message.warning("Incorrect Permissions."));
+                    }
+                }else if (arg.equalsIgnoreCase("remove")){
+                    if (player.hasPermission("kits.admin")){
                         if (Kit.exists(args[1])){
                             Kits.kitsFile.set(args[1], null, false);
                             player.sendMessage(Message.info("Kit " + args[1] + " has been removed."));
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
                         }
-	                }
-	            }else{
-                    sender.sendMessage(Message.warning("Incorrect Permissions."));
+                    }else{
+                        sender.sendMessage(Message.warning("Incorrect Permissions."));
+                    }
+                }else{
+                    if (player.hasPermission("kits.others.spawn." + arg)){
+                        if (Kit.exists(arg)){
+                            Player receiver = Bukkit.getPlayerExact(args[1]);
+                            if (receiver != null){
+                                ItemStack[] itemList = Kit.getKit(arg);
+                                for (int i = 0; i < itemList.length; i ++){
+                                    receiver.getInventory().setItem(i, itemList[i]);
+                                }
+                                receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
+                                player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
+                            }else{
+                                player.sendMessage(Message.warning(args[1] + " is not online."));
+                            }
+                        }else{
+                            player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
+                        }
+                    }else{
+                        player.sendMessage(Message.warning("Incorrect Permissions."));
+                    }
                 }
 	        }
 	    }
-        
 		return false;
 	}
 }

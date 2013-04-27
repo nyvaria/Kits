@@ -1,7 +1,5 @@
 package com.dragonphase.Kits.Util;
 
-import java.util.ArrayList;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,9 +17,8 @@ public class Kit {
         return exists;
     }
     
-    @SuppressWarnings("unchecked")
-    public static ArrayList<ItemStack> getKit(String kitName){
-        return (ArrayList<ItemStack>) Kits.kitsFile.getList(kitName);
+    public static ItemStack[] getKit(String kitName){
+        return Kits.kitsFile.getInventory(kitName);
     }
 
     public static void create(Plugin plugin, Player player, String kitName) {
@@ -32,13 +29,7 @@ public class Kit {
     public static void edit(Plugin plugin, Player player, String kitName) {
         Inventory inventory = plugin.getServer().createInventory(player, 9, kitName);
         
-        for (int i = 0; i < 9; i++) {
-            try{
-                inventory.setItem(i, getKit(kitName).get(i));
-            }catch (Exception ex){
-                continue;
-            }
-        }
+        inventory.setContents(getKit(kitName));
         
         player.openInventory(inventory);
     }

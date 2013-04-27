@@ -178,4 +178,12 @@ public class FileManager{
     public List<?> getList(String path){
         return fileManager.getList(path);
     }
+    
+    public ItemStack[] getInventory(String path){
+        ItemStack[] inventory = new ItemStack[getList(path).size()];
+        for (int i = 0; i < getList(path).size(); i ++){
+            inventory[i] = (ItemStack) getList(path).get(i);
+        }
+        return inventory;
+    }
 }
