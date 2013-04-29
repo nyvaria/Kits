@@ -1,7 +1,9 @@
 package com.dragonphase.Kits;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dragonphase.Kits.Commands.KitCommandExecutor;
@@ -15,6 +17,9 @@ public class Kits extends JavaPlugin{
 	public static Kits plugin;
     public static FileManager configurationFile;
     public static FileManager kitsFile;
+    
+    private static HashMap<Player, Long> delayedPlayers;
+    private static int delay;
 	
 	@Override
 	public void onDisable(){
@@ -27,8 +32,13 @@ public class Kits extends JavaPlugin{
 		logger.info(Message.message("Version " + getPluginVersion() + " enabled."));
 		
 		saveDefaultConfig();
+		getConfig().options().copyDefaults(true);
+		
         configurationFile = new FileManager(this, "config.yml");
         kitsFile = new FileManager(this, "kits.yml");
+        
+        delayedPlayers = new HashMap<Player, Long>();
+        delay = Kits.configurationFile.getInt("options.delay");
         
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
@@ -40,6 +50,8 @@ public class Kits extends JavaPlugin{
 		reloadConfig();
 		configurationFile.loadFile();
 		kitsFile.loadFile();
+		
+        delay = Kits.configurationFile.getInt("options.delay");
 	}
 	
 	public String getPluginDetails(){
@@ -52,5 +64,29 @@ public class Kits extends JavaPlugin{
 	
 	public String getPluginVersion(){
 		return getDescription().getVersion();
+	}
+    
+    public static void addDelayedPlayer(Player player){
+        delayedPlayers.put(player, System.currentTimeMillis());
+    }
+    
+    public static void removeDelayedPlayer(Player player){
+        delayedPlayers.remove(player);
+    }
+	
+	public static boolean playerDelayed(Player player){
+	    return delayedPlayers.containsKey(player);
+	}
+	
+	public static Long getPlayerDelay(Player player){
+	    return delayedPlayers.get(player);
+	}
+	
+	public static int getDelay(int multiplier){
+	    return delay*multiplier;
+	}
+	
+	public static int getRemainingTime(Player player){
+	    return (int) (getDelay(1) - ((System.currentTimeMillis() - getPlayerDelay(player))/1000));
 	}
 }

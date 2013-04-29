@@ -20,7 +20,8 @@ public class KitCommandExecutor implements CommandExecutor{
 	    plugin = instance;
 	}
 
-	@Override
+	@SuppressWarnings("deprecation")
+    @Override
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
 	    if (!(sender instanceof Player)) return false;
         Player player = (Player) sender;
@@ -39,12 +40,25 @@ public class KitCommandExecutor implements CommandExecutor{
                     player.sendMessage(Message.info("/kit remove <kitname>"));
                 }else{
                     if (player.hasPermission("kits.spawn." + arg)){
+                        if (Kits.playerDelayed(player)){
+                            if (Kits.getRemainingTime(player) < 1){
+                                Kits.removeDelayedPlayer(player);
+                            }else{
+                                int remaining = Kits.getRemainingTime(player);
+                                String seconds = remaining == 1 ? " second" : " seconds";
+                                player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
+                                return false;
+                            }
+                        }
                         if (Kit.exists(arg)){
                             ItemStack[] itemList = Kit.getKit(arg);
                             for (int i = 0; i < itemList.length; i ++){
                                 player.getInventory().setItem(i, itemList[i]);
                             }
+                            player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
+                            
+                            if (!player.hasPermission("kits.bypassdelay") && Kits.getDelay(1) > 0) Kits.addDelayedPlayer(player);
                         }else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
                         }
@@ -90,15 +104,30 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }else{
                     if (player.hasPermission("kits.others.spawn." + arg)){
+                        Player receiver = Bukkit.getPlayerExact(args[1]);
+                        
+                        if (Kits.playerDelayed(receiver)){
+                            if (Kits.getRemainingTime(receiver) < 1){
+                                Kits.removeDelayedPlayer(receiver);
+                            }else{
+                                int remaining = Kits.getRemainingTime(receiver);
+                                String seconds = remaining == 1 ? " second" : " seconds";
+                                player.sendMessage(Message.warning(receiver.getName() + " must wait " + remaining + seconds + " before spawning another kit."));
+                                return false;
+                            }
+                        }
+                        
                         if (Kit.exists(arg)){
-                            Player receiver = Bukkit.getPlayerExact(args[1]);
                             if (receiver != null){
                                 ItemStack[] itemList = Kit.getKit(arg);
                                 for (int i = 0; i < itemList.length; i ++){
                                     receiver.getInventory().setItem(i, itemList[i]);
                                 }
+                                receiver.updateInventory();
                                 receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
                                 player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
+                                
+                                if (!receiver.hasPermission("kits.bypassdelay") && Kits.getDelay(1) > 0) Kits.addDelayedPlayer(receiver);
                             }else{
                                 player.sendMessage(Message.warning(args[1] + " is not online."));
                             }
