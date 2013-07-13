@@ -8,16 +8,22 @@ import com.dragonphase.Kits.Kits;
 
 public class Kit {
     
+    private static Kits plugin;
+    
+    public static void setParent(Kits instance){
+        plugin = instance;
+    }
+    
     public static boolean exists(String kitName){
         boolean exists = false;
-        for (String key : Kits.kitsFile.getKeys(false)){
+        for (String key : plugin.getKitsConfig().getKeys(false)){
             if (key.equals(kitName)) exists = true;
         }
         return exists;
     }
     
     public static ItemStack[] getKit(String kitName){
-        return Kits.kitsFile.getInventory(kitName);
+        return plugin.getKitsConfig().getInventory(kitName);
     }
 
     public static void create(Plugin plugin, Player player, String kitName) {
@@ -34,6 +40,6 @@ public class Kit {
     }
     
     public static int kitSize(String kit){
-        return Kits.kitsFile.getConfigurationSection(kit).getKeys(false).size();
+        return plugin.getKitsConfig().getConfigurationSection(kit).getKeys(false).size();
     }
 }

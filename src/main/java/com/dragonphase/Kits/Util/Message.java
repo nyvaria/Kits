@@ -5,22 +5,21 @@ import org.bukkit.ChatColor;
 import com.dragonphase.Kits.Kits;
 
 public class Message {
-
-	public static Kits plugin;
-	
-	public static void setParent(Kits instance){
-		plugin = instance;
-	}
-	
-	public static String message(String message){
-		return ChatColor.DARK_GRAY + plugin.getPluginName() + ": " + ChatColor.GRAY + message;
-	}
-	
-	public static String warning(String message){
-		return ChatColor.DARK_GRAY + plugin.getPluginName() + ": " + ChatColor.RED + message;
-	}
-	
-	public static String info(String message){
-		return ChatColor.DARK_GRAY + plugin.getPluginName() + ": " + ChatColor.DARK_AQUA + message;
-	}
+    private static String pluginName;
+    
+    public static void setParent(Kits instance){
+        pluginName = instance.getPluginName();
+    }
+    
+    public static String message(String message){
+        return ChatColor.DARK_GRAY + pluginName + ": " + ChatColor.GRAY + message;
+    }
+    
+    public static String warning(String message){
+        return ChatColor.DARK_GRAY + pluginName + ": " + ChatColor.RED + message;
+    }
+    
+    public static String info(String message){
+        return ChatColor.DARK_GRAY + pluginName + ": " + ChatColor.DARK_AQUA + message;
+    }
 }

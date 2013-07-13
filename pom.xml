@@ -15,6 +15,20 @@
     <minecraft.version>1.5.1</minecraft.version>
     <minecraft_version>1_5_R2</minecraft_version>
   </properties>
+  
+  <build>
+  	<finalName>${project.artifactId}</finalName>
+  	<resources>
+  		<resource>
+  			<directory>${project.basedir}/src/main/resources</directory>
+  			<!-- <targetPath>/</targetPath> -->
+  			<includes>
+  				<include>**</include>
+  			</includes>
+  			<filtering>true</filtering>
+  		</resource>
+  	</resources>
+  </build>
 
   <scm>
     <connection>scm:git:git://github.com/Dragonphase/Kits.git</connection>

@@ -2,6 +2,9 @@
 #          Kits Configuration          #
 #--------------------------------------#
 #                                      #
+# The amount of bars in kit creation   #
+# chere are in the kits. T             #
+#                                      #
 # Delays can be set up when spawning   #
 # kits. Delays are managed in seconds. #
 #                                      #
@@ -16,4 +19,6 @@
 #--------------------------------------#
 
 options:
+  bars: 1
   delay: 0
+  overwrite: false

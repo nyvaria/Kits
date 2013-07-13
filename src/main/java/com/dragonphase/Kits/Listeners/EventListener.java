@@ -6,6 +6,7 @@ import com.dragonphase.Kits.Util.Message;
 import java.util.logging.Logger;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -43,22 +44,22 @@ public class EventListener implements Listener
             if (((MetadataValue)player.getMetadata("editingKit").get(0)).asBoolean()){
                 String kit = inventory.getTitle();
 
-                Kits.kitsFile.set(kit, inventory.getContents(), false);
+                plugin.getKitsConfig().set(kit, inventory.getContents(), false);
 
                 player.sendMessage(Message.info("Kit " + kit + " has been updated."));
                 player.setMetadata("editingKit", new FixedMetadataValue(plugin, Boolean.valueOf(false)));
 
-                Kits.kitsFile.loadFile();
+                plugin.getKitsConfig().loadFile();
             }
             if (((MetadataValue)player.getMetadata("creatingKit").get(0)).asBoolean()){
                 String kit = inventory.getTitle();
 
-                Kits.kitsFile.set(kit, inventory.getContents(), false);
+                plugin.getKitsConfig().set(kit, inventory.getContents(), false);
 
                 player.sendMessage(Message.info("Kit " + kit + " has been created."));
                 player.setMetadata("creatingKit", new FixedMetadataValue(plugin, Boolean.valueOf(false)));
 
-                Kits.kitsFile.loadFile();
+                plugin.getKitsConfig().loadFile();
             }
         }
         catch (Exception ex)
@@ -67,47 +68,58 @@ public class EventListener implements Listener
         }
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if ((event.getAction() != Action.RIGHT_CLICK_BLOCK) && (event.getAction() != Action.RIGHT_CLICK_AIR)) return;
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign){
+            handleSignClick(event.getPlayer(), (Sign)event.getClickedBlock().getState());
 
-        if ((event.getClickedBlock().getState() instanceof Sign)){
-            for (int i = 0; i < 4; i++){
-                if (((Sign)event.getClickedBlock().getState()).getLines()[i].equalsIgnoreCase("[kit]") && i != 3){
-                    try{
-                        Player player = event.getPlayer();
-                        String arg = ((Sign)event.getClickedBlock().getState()).getLines()[i+1];
-                        if (player.hasPermission("kits.spawn." + arg)){
-                            if (Kits.playerDelayed(player)){
-                                if (Kits.getRemainingTime(player) < 1){
-                                    Kits.removeDelayedPlayer(player);
-                                }else{
-                                    int remaining = Kits.getRemainingTime(player);
-                                    String seconds = remaining == 1 ? " second" : " seconds";
-                                    player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
-                                    return;
-                                }
-                            }
-                            if (Kit.exists(arg)){
-                                ItemStack[] itemList = Kit.getKit(arg);
-                                for (int x = 0; x < itemList.length; x++){
-                                    player.getInventory().setItem(x, itemList[x]);
-                                }
-                                player.updateInventory();
-                                player.sendMessage(Message.info("Kit " + arg + " spawned."));
+            event.setUseItemInHand(Result.DENY);
+            event.setUseInteractedBlock(Result.DENY);
+        }else if (event.getAction() == Action.RIGHT_CLICK_AIR && event.getPlayer().getTargetBlock(null, 5).getState() instanceof Sign){
+            handleSignClick(event.getPlayer(), (Sign)event.getPlayer().getTargetBlock(null,  5).getState());
 
-                                if ((!player.hasPermission("kits.bypassdelay")) && (Kits.getDelay(1) > 0)) Kits.addDelayedPlayer(player); 
+            event.setUseItemInHand(Result.DENY);
+            event.setUseInteractedBlock(Result.DENY);
+        }
+    }
+    
+    @SuppressWarnings("deprecation")
+    public void handleSignClick(Player player, Sign sign){
+        for (int i = 0; i < 4; i++){
+            if (sign.getLines()[i].equalsIgnoreCase("[kit]") && i != 3){
+                try{
+                    String arg = sign.getLines()[i+1];
+                    if (player.hasPermission("kits.spawn." + arg)){
+                        if (plugin.playerDelayed(player)){
+                            if (plugin.getRemainingTime(player) < 1){
+                                plugin.removeDelayedPlayer(player);
+                            }else{
+                                int remaining = plugin.getRemainingTime(player);
+                                String seconds = remaining == 1 ? " second" : " seconds";
+                                player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
+                                return;
                             }
-                            else{ player.sendMessage(Message.warning("Kit " + arg + " does not exist.")); }
+                        }
+                        if (Kit.exists(arg)){
+                            ItemStack[] itemList = Kit.getKit(arg);
+                            for (int x = 0; x < itemList.length; x++){
+                                player.getInventory().setItem(x, itemList[x]);
+                            }
+                            player.updateInventory();
+                            player.sendMessage(Message.info("Kit " + arg + " spawned."));
+
+                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(1) > 0)) plugin.addDelayedPlayer(player);
                         }
                         else{
-                            player.sendMessage(Message.warning("Incorrect Permissions."));
+                            player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
                         }
-                    }catch (Exception ex){
-                        continue;
                     }
+                    else{
+                        player.sendMessage(Message.warning("Incorrect Permissions."));
+                    }
+                }catch (Exception ex){
+                    continue;
                 }
             }
         }

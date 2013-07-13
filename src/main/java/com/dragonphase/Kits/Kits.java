@@ -14,12 +14,10 @@ import com.dragonphase.Kits.Util.Message;
 
 public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
-	public static Kits plugin;
-    public static FileManager configurationFile;
-    public static FileManager kitsFile;
+    private FileManager config, kits;
     
-    private static HashMap<Player, Long> delayedPlayers;
-    private static int delay;
+    private HashMap<Player, Long> delayedPlayers;
+    private int delay;
 	
 	@Override
 	public void onDisable(){
@@ -34,11 +32,11 @@ public class Kits extends JavaPlugin{
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		
-        configurationFile = new FileManager(this, "config.yml");
-        kitsFile = new FileManager(this, "kits.yml");
+        config = new FileManager(this, "config.yml");
+        setKits(new FileManager(this, "kits.yml"));
         
         delayedPlayers = new HashMap<Player, Long>();
-        delay = Kits.configurationFile.getInt("options.delay");
+        delay = config.getInt("options.delay");
         
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
@@ -48,10 +46,10 @@ public class Kits extends JavaPlugin{
 	
 	public void reload(){
 		reloadConfig();
-		configurationFile.loadFile();
-		kitsFile.loadFile();
+		config.loadFile();
+		getKitsConfig().loadFile();
 		
-        delay = Kits.configurationFile.getInt("options.delay");
+        delay = config.getInt("options.delay");
 	}
 	
 	public String getPluginDetails(){
@@ -66,27 +64,35 @@ public class Kits extends JavaPlugin{
 		return getDescription().getVersion();
 	}
     
-    public static void addDelayedPlayer(Player player){
+    public void addDelayedPlayer(Player player){
         delayedPlayers.put(player, System.currentTimeMillis());
     }
     
-    public static void removeDelayedPlayer(Player player){
+    public void removeDelayedPlayer(Player player){
         delayedPlayers.remove(player);
     }
 	
-	public static boolean playerDelayed(Player player){
+	public boolean playerDelayed(Player player){
 	    return delayedPlayers.containsKey(player);
 	}
 	
-	public static Long getPlayerDelay(Player player){
+	public Long getPlayerDelay(Player player){
 	    return delayedPlayers.get(player);
 	}
 	
-	public static int getDelay(int multiplier){
+	public int getDelay(int multiplier){
 	    return delay*multiplier;
 	}
 	
-	public static int getRemainingTime(Player player){
+	public int getRemainingTime(Player player){
 	    return (int) (getDelay(1) - ((System.currentTimeMillis() - getPlayerDelay(player))/1000));
 	}
+
+    public FileManager getKitsConfig() {
+        return kits;
+    }
+
+    public void setKits(FileManager kits) {
+        this.kits = kits;
+    }
 }

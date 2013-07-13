@@ -18,12 +18,37 @@ public class KitCommandExecutor implements CommandExecutor{
     
 	public KitCommandExecutor(Kits instance) {
 	    plugin = instance;
+	    Kit.setParent(plugin);
 	}
 
 	@SuppressWarnings("deprecation")
     @Override
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
-	    if (!(sender instanceof Player)) return false;
+	    if (!(sender instanceof Player)){
+	        if (args.length == 2){
+	            String arg = args[0];
+	            
+                Player receiver = Bukkit.getPlayerExact(args[1]);
+                
+                if (Kit.exists(arg)){
+                    if (receiver != null){
+                        ItemStack[] itemList = Kit.getKit(arg);
+                        for (int i = 0; i < itemList.length; i ++){
+                            receiver.getInventory().setItem(i, itemList[i]);
+                        }
+                        receiver.updateInventory();
+                        receiver.sendMessage(Message.info("Kit " + arg + " spawned by Console."));
+                        sender.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
+                    }else{
+                        sender.sendMessage(Message.warning(args[1] + " is not online."));
+                    }
+                }else{
+                    sender.sendMessage(Message.warning("Kit " + arg + " does not exist."));
+                }
+	        }
+	        return false;
+	    }
+	    
         Player player = (Player) sender;
 	    
 	    if (args.length == 0){
@@ -40,11 +65,11 @@ public class KitCommandExecutor implements CommandExecutor{
                     player.sendMessage(Message.info("/kit remove <kitname>"));
                 }else{
                     if (player.hasPermission("kits.spawn." + arg)){
-                        if (Kits.playerDelayed(player)){
-                            if (Kits.getRemainingTime(player) < 1){
-                                Kits.removeDelayedPlayer(player);
+                        if (plugin.playerDelayed(player)){
+                            if (plugin.getRemainingTime(player) < 1){
+                                plugin.removeDelayedPlayer(player);
                             }else{
-                                int remaining = Kits.getRemainingTime(player);
+                                int remaining = plugin.getRemainingTime(player);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
                                 return false;
@@ -58,7 +83,7 @@ public class KitCommandExecutor implements CommandExecutor{
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
                             
-                            if (!player.hasPermission("kits.bypassdelay") && Kits.getDelay(1) > 0) Kits.addDelayedPlayer(player);
+                            if (!player.hasPermission("kits.bypassdelay") && plugin.getDelay(1) > 0) plugin.addDelayedPlayer(player);
                         }else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
                         }
@@ -94,7 +119,7 @@ public class KitCommandExecutor implements CommandExecutor{
                 }else if (arg.equalsIgnoreCase("remove")){
                     if (player.hasPermission("kits.admin")){
                         if (Kit.exists(args[1])){
-                            Kits.kitsFile.set(args[1], null, false);
+                            plugin.getKitsConfig().set(args[1], null, false);
                             player.sendMessage(Message.info("Kit " + args[1] + " has been removed."));
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
@@ -106,11 +131,11 @@ public class KitCommandExecutor implements CommandExecutor{
                     if (player.hasPermission("kits.others.spawn." + arg)){
                         Player receiver = Bukkit.getPlayerExact(args[1]);
                         
-                        if (Kits.playerDelayed(receiver)){
-                            if (Kits.getRemainingTime(receiver) < 1){
-                                Kits.removeDelayedPlayer(receiver);
+                        if (plugin.playerDelayed(receiver)){
+                            if (plugin.getRemainingTime(receiver) < 1){
+                                plugin.removeDelayedPlayer(receiver);
                             }else{
-                                int remaining = Kits.getRemainingTime(receiver);
+                                int remaining = plugin.getRemainingTime(receiver);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning(receiver.getName() + " must wait " + remaining + seconds + " before spawning another kit."));
                                 return false;
@@ -127,7 +152,7 @@ public class KitCommandExecutor implements CommandExecutor{
                                 receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
                                 player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
                                 
-                                if (!receiver.hasPermission("kits.bypassdelay") && Kits.getDelay(1) > 0) Kits.addDelayedPlayer(receiver);
+                                if (!receiver.hasPermission("kits.bypassdelay") && plugin.getDelay(1) > 0) plugin.addDelayedPlayer(receiver);
                             }else{
                                 player.sendMessage(Message.warning(args[1] + " is not online."));
                             }

@@ -32,7 +32,7 @@ public class KitsCommandExecutor implements CommandExecutor{
 			}
 		}else{
 		    String kits = "";
-		    for (String string : Kits.kitsFile.getKeys(false)){
+		    for (String string : plugin.getKitsConfig().getKeys(false)){
 		        kits += string + ", ";
 		    }
             if (kits != "" || !kits.isEmpty()){
