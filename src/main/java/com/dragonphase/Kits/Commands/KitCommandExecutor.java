@@ -68,7 +68,7 @@ public class KitCommandExecutor implements CommandExecutor{
 	        
 	        if (args.length == 1){
                 if (arg.equalsIgnoreCase("create")){
-                    player.sendMessage(Message.info("/kit create <kitname>"));
+                    player.sendMessage(Message.info("/kit create <kitname> [bars]"));
                 }else if (arg.equalsIgnoreCase("edit")){
                     player.sendMessage(Message.info("/kit edit <kitname>"));
                 }else if (arg.equalsIgnoreCase("remove")){

@@ -16,7 +16,7 @@ public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
     private FileManager config, kits;
     
-    private HashMap<Player, Long> delayedPlayers;
+    private HashMap<String, Long> delayedPlayers;
     private int delay;
     private boolean overwrite;
 	
@@ -36,7 +36,7 @@ public class Kits extends JavaPlugin{
         config = new FileManager(this, "config.yml");
         setKits(new FileManager(this, "kits.yml"));
         
-        delayedPlayers = new HashMap<Player, Long>();
+        delayedPlayers = new HashMap<String, Long>();
         delay = config.getInt("options.delay");
         overwrite = config.getBoolean("options.overwrite");
         
@@ -68,19 +68,19 @@ public class Kits extends JavaPlugin{
 	}
     
     public void addDelayedPlayer(Player player){
-        delayedPlayers.put(player, System.currentTimeMillis());
+        delayedPlayers.put(player.getName(), System.currentTimeMillis());
     }
     
     public void removeDelayedPlayer(Player player){
-        delayedPlayers.remove(player);
+        delayedPlayers.remove(player.getName());
     }
 	
 	public boolean playerDelayed(Player player){
-	    return delayedPlayers.containsKey(player);
+	    return delayedPlayers.containsKey(player.getName());
 	}
 	
 	public Long getPlayerDelay(Player player){
-	    return delayedPlayers.get(player);
+	    return delayedPlayers.get(player.getName());
 	}
 	
 	public int getDelay(int multiplier){
