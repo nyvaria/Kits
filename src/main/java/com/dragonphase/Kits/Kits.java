@@ -18,6 +18,7 @@ public class Kits extends JavaPlugin{
     
     private HashMap<Player, Long> delayedPlayers;
     private int delay;
+    private boolean overwrite;
 	
 	@Override
 	public void onDisable(){
@@ -37,6 +38,7 @@ public class Kits extends JavaPlugin{
         
         delayedPlayers = new HashMap<Player, Long>();
         delay = config.getInt("options.delay");
+        overwrite = config.getBoolean("options.overwrite");
         
 		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 
@@ -50,6 +52,7 @@ public class Kits extends JavaPlugin{
 		getKitsConfig().loadFile();
 		
         delay = config.getInt("options.delay");
+        overwrite = config.getBoolean("options.overwrite");
 	}
 	
 	public String getPluginDetails(){
@@ -82,6 +85,10 @@ public class Kits extends JavaPlugin{
 	
 	public int getDelay(int multiplier){
 	    return delay*multiplier;
+	}
+	
+	public boolean getOverwrite(){
+	    return overwrite;
 	}
 	
 	public int getRemainingTime(Player player){

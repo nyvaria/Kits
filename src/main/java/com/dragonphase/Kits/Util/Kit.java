@@ -2,7 +2,6 @@ package com.dragonphase.Kits.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import com.dragonphase.Kits.Kits;
 
@@ -26,15 +25,19 @@ public class Kit {
         return plugin.getKitsConfig().getInventory(kitName);
     }
 
-    public static void create(Plugin plugin, Player player, String kitName) {
-        Inventory inventory = plugin.getServer().createInventory(player, 9, kitName);
+    public static void create(Player player, String kitName, int bars) {
+        System.out.println(bars);
+        System.out.println(bars*9);
+        Inventory inventory = plugin.getServer().createInventory(player, 9*(bars < 1 ? 1 : bars > 4 ? 4 : bars), kitName);
         player.openInventory(inventory);
     }
     
-    public static void edit(Plugin plugin, Player player, String kitName) {
-        Inventory inventory = plugin.getServer().createInventory(player, 9, kitName);
+    public static void edit(Player player, String kitName) {
+        ItemStack[] itemList = getKit(kitName);
+        int bars = (int) Math.ceil(itemList.length / 9);
+        Inventory inventory = plugin.getServer().createInventory(player, 9*(bars < 1 ? 1 : bars > 4 ? 4 : bars), kitName);
         
-        inventory.setContents(getKit(kitName));
+        inventory.setContents(itemList);
         
         player.openInventory(inventory);
     }

@@ -4,6 +4,8 @@ import com.dragonphase.Kits.Kits;
 import com.dragonphase.Kits.Util.Kit;
 import com.dragonphase.Kits.Util.Message;
 import java.util.logging.Logger;
+
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -71,12 +73,12 @@ public class EventListener implements Listener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign){
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (event.getClickedBlock().getType() == Material.WALL_SIGN || event.getClickedBlock().getType() == Material.SIGN_POST)){
             handleSignClick(event.getPlayer(), (Sign)event.getClickedBlock().getState());
 
             event.setUseItemInHand(Result.DENY);
             event.setUseInteractedBlock(Result.DENY);
-        }else if (event.getAction() == Action.RIGHT_CLICK_AIR && event.getPlayer().getTargetBlock(null, 5).getState() instanceof Sign){
+        }else if (event.getAction() == Action.RIGHT_CLICK_AIR && (event.getPlayer().getTargetBlock(null, 5).getType() == Material.WALL_SIGN || event.getPlayer().getTargetBlock(null, 5).getType() == Material.SIGN_POST)){
             handleSignClick(event.getPlayer(), (Sign)event.getPlayer().getTargetBlock(null,  5).getState());
 
             event.setUseItemInHand(Result.DENY);
@@ -103,8 +105,18 @@ public class EventListener implements Listener
                         }
                         if (Kit.exists(arg)){
                             ItemStack[] itemList = Kit.getKit(arg);
-                            for (int x = 0; x < itemList.length; x++){
-                                player.getInventory().setItem(x, itemList[x]);
+                            if (plugin.getOverwrite()){
+                                for (int x = 0; x < itemList.length; x ++){
+                                    player.getInventory().setItem(x, itemList[x]);
+                                }
+                            }else{
+                                try{
+                                    for (int x = 0; x < itemList.length; x ++){
+                                        player.getInventory().addItem(itemList[x]);
+                                    }
+                                }catch (Exception ex){
+                                    if (player.getInventory().firstEmpty() == -1) player.sendMessage(Message.warning("You don't have enough space in your inventory to spawn the entire kit."));
+                                }
                             }
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));

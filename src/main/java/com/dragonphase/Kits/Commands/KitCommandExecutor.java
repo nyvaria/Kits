@@ -33,8 +33,18 @@ public class KitCommandExecutor implements CommandExecutor{
                 if (Kit.exists(arg)){
                     if (receiver != null){
                         ItemStack[] itemList = Kit.getKit(arg);
-                        for (int i = 0; i < itemList.length; i ++){
-                            receiver.getInventory().setItem(i, itemList[i]);
+                        if (plugin.getOverwrite()){
+                            for (int i = 0; i < itemList.length; i ++){
+                                receiver.getInventory().setItem(i, itemList[i]);
+                            }
+                        }else{
+                            try{
+                                for (int i = 0; i < itemList.length; i ++){
+                                    receiver.getInventory().addItem(itemList[i]);
+                                }
+                            }catch (Exception ex){
+                                if (receiver.getInventory().firstEmpty() == -1) sender.sendMessage(Message.warning(receiver.getName() + " didn't have enough space in their inventory to spawn the entire kit."));
+                            }
                         }
                         receiver.updateInventory();
                         receiver.sendMessage(Message.info("Kit " + arg + " spawned by Console."));
@@ -77,8 +87,18 @@ public class KitCommandExecutor implements CommandExecutor{
                         }
                         if (Kit.exists(arg)){
                             ItemStack[] itemList = Kit.getKit(arg);
-                            for (int i = 0; i < itemList.length; i ++){
-                                player.getInventory().setItem(i, itemList[i]);
+                            if (plugin.getOverwrite()){
+                                for (int i = 0; i < itemList.length; i ++){
+                                    player.getInventory().setItem(i, itemList[i]);
+                                }
+                            }else{
+                                try{
+                                    for (int i = 0; i < itemList.length; i ++){
+                                        player.getInventory().addItem(itemList[i]);
+                                    }
+                                }catch (Exception ex){
+                                    if (player.getInventory().firstEmpty() == -1) sender.sendMessage(Message.warning("You don't have enough space in your inventory to spawn the entire kit."));
+                                }
                             }
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
@@ -95,7 +115,15 @@ public class KitCommandExecutor implements CommandExecutor{
 	            if (arg.equalsIgnoreCase("create")){
 	                if (player.hasPermission("kits.admin")){
                         if (!Kit.exists(args[1])){
-                            Kit.create(plugin, player, args[1]);
+                            if (args.length > 2){
+                                try{
+                                    Kit.create(player, args[1], Integer.parseInt(args[2]));
+                                }catch (Exception ex){
+                                    player.sendMessage(Message.warning("Bars amount must be from 1-4"));
+                                }
+                            }else{
+                                Kit.create(player, args[1], 1);
+                            }
                             player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
                             player.setMetadata("creatingKit", new FixedMetadataValue(plugin, true));
                         }else{
@@ -107,7 +135,7 @@ public class KitCommandExecutor implements CommandExecutor{
 	            }else if (arg.equalsIgnoreCase("edit")){
                     if (player.hasPermission("kits.admin")){
     	                if (Kit.exists(args[1])){
-                            Kit.edit(plugin, player, args[1]);
+                            Kit.edit(player, args[1]);
                             player.setMetadata("editingKit", new FixedMetadataValue(plugin, true));
                             player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
                         }else{

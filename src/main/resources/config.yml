@@ -3,10 +3,21 @@
 #--------------------------------------#
 #                                      #
 # The amount of bars in kit creation   #
-# chere are in the kits. T             #
+# can be defined below. Since a        #
+# player's inventory can only have 4   #
+# bars of 9 slots, anything over 4     #
+# will not work.                       #
 #                                      #
 # Delays can be set up when spawning   #
 # kits. Delays are managed in seconds. #
+#                                      #
+# You can toggle inventory overwrite   #
+# below. Setting this to true will     #
+# cause kits to empty the viable area  #
+# of a player's inventory; setting it  #
+# to false will attempt to add the     #
+# items to the player's inventory      #
+# without deleting existing items.     #
 #                                      #
 #--------------------------------------#
 #                                      #
@@ -19,6 +30,5 @@
 #--------------------------------------#
 
 options:
-  bars: 1
   delay: 0
   overwrite: false
