@@ -5,15 +5,15 @@ import org.bukkit.inventory.ItemStack;
 
 import com.dragonphase.Kits.Kits;
 
-public class Kit {
+public class KitManager {
     
-    private static Kits plugin;
+    private Kits plugin;
     
-    public static void setParent(Kits instance){
+    public KitManager(Kits instance){
         plugin = instance;
     }
     
-    public static boolean exists(String kitName){
+    public boolean exists(String kitName){
         boolean exists = false;
         for (String key : plugin.getKitsConfig().getKeys(false)){
             if (key.equals(kitName)) exists = true;
@@ -21,32 +21,32 @@ public class Kit {
         return exists;
     }
     
-    public static ItemStack[] getKit(String kitName){
+    public ItemStack[] getKit(String kitName){
         return plugin.getKitsConfig().getInventory(kitName + ".kit");
     }
     
-    public static int getDelay(String kitName){
+    public int getDelay(String kitName){
     	return plugin.getKitsConfig().getInt(kitName + ".delay");
     }
     
-    public static void setDelay(String kitName, int delay){
+    public void setDelay(String kitName, int delay){
     	plugin.getKitsConfig().set(kitName + ".delay", delay, false);
     }
     
-    public static boolean getOverwrite(String kitName){
+    public boolean getOverwrite(String kitName){
     	return plugin.getKitsConfig().getBoolean(kitName + ".overwrite");
     }
     
-    public static void setOverwrite(String kitName, boolean overwrite){
+    public void setOverwrite(String kitName, boolean overwrite){
     	plugin.getKitsConfig().set(kitName + ".overwrite", overwrite, false);
     }
 
-    public static void create(Player player, String kitName, int bars) {
+    public void create(Player player, String kitName, int bars) {
         Inventory inventory = plugin.getServer().createInventory(player, 9*(bars < 1 ? 1 : bars > 4 ? 4 : bars), kitName);
         player.openInventory(inventory);
     }
     
-    public static void edit(Player player, String kitName) {
+    public void edit(Player player, String kitName) {
         ItemStack[] itemList = getKit(kitName);
         int bars = (int) Math.ceil(itemList.length / 9);
         Inventory inventory = plugin.getServer().createInventory(player, 9*(bars < 1 ? 1 : bars > 4 ? 4 : bars), kitName);
@@ -56,7 +56,7 @@ public class Kit {
         player.openInventory(inventory);
     }
     
-    public static int kitSize(String kit){
+    public int kitSize(String kit){
         return plugin.getKitsConfig().getConfigurationSection(kit).getKeys(false).size();
     }
 }

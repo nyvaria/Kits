@@ -9,16 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.dragonphase.Kits.Kits;
-import com.dragonphase.Kits.Util.Kit;
 import com.dragonphase.Kits.Util.Message;
 
 public class KitCommandExecutor implements CommandExecutor{
 	
-    public static Kits plugin;
+    private Kits plugin;
     
 	public KitCommandExecutor(Kits instance) {
 	    plugin = instance;
-	    Kit.setParent(plugin);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -29,10 +27,10 @@ public class KitCommandExecutor implements CommandExecutor{
 	            
                 Player receiver = Bukkit.getPlayerExact(args[1]);
                 
-                if (Kit.exists(arg)){
+                if (plugin.getKitManager().exists(arg)){
                     if (receiver != null){
-                        ItemStack[] itemList = Kit.getKit(arg);
-                        if (Kit.getOverwrite(arg)){
+                        ItemStack[] itemList = plugin.getKitManager().getKit(arg);
+                        if (plugin.getKitManager().getOverwrite(arg)){
                             for (int i = 0; i < itemList.length; i ++){
                                 receiver.getInventory().setItem(i, itemList[i]);
                             }
@@ -79,18 +77,18 @@ public class KitCommandExecutor implements CommandExecutor{
                 }else{
                     if (player.hasPermission("kits.spawn." + arg)){
                         if (plugin.playerDelayed(player)){
-                            if (plugin.getRemainingTime(Kit.getDelay(arg), player) < 1){
+                            if (plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), player) < 1){
                                 plugin.removeDelayedPlayer(player);
                             }else{
-                                int remaining = plugin.getRemainingTime(Kit.getDelay(arg), player);
+                                int remaining = plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), player);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
                                 return false;
                             }
                         }
-                        if (Kit.exists(arg)){
-                            ItemStack[] itemList = Kit.getKit(arg);
-                            if (Kit.getOverwrite(arg)){
+                        if (plugin.getKitManager().exists(arg)){
+                            ItemStack[] itemList = plugin.getKitManager().getKit(arg);
+                            if (plugin.getKitManager().getOverwrite(arg)){
                                 for (int i = 0; i < itemList.length; i ++){
                                     player.getInventory().setItem(i, itemList[i]);
                                 }
@@ -106,7 +104,7 @@ public class KitCommandExecutor implements CommandExecutor{
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
                             
-                            if (!player.hasPermission("kits.bypassdelay") && plugin.getDelay(Kit.getDelay(arg), 1) > 0) plugin.addDelayedPlayer(player);
+                            if (!player.hasPermission("kits.bypassdelay") && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(player);
                         }else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
                         }
@@ -117,36 +115,36 @@ public class KitCommandExecutor implements CommandExecutor{
 	        }else if (args.length > 1){
 	            if (arg.equalsIgnoreCase("create")){
 	                if (player.hasPermission("kits.admin")){
-                        if (!Kit.exists(args[1])){
+                        if (!plugin.getKitManager().exists(args[1])){
                             if (args.length > 2){
                                 try{
-                                    Kit.create(player, args[1], Integer.parseInt(args[2]));
+                                    plugin.getKitManager().create(player, args[1], Integer.parseInt(args[2]));
                                 }catch (Exception ex){
                                     player.sendMessage(Message.warning("Bars amount must be from 1-4"));
                                 }
                             }else{
-                                Kit.create(player, args[1], 1);
+                                plugin.getKitManager().create(player, args[1], 1);
                             }
                             if (args.length > 3){
                             	if (args[3].equalsIgnoreCase("on") || args[3].equalsIgnoreCase("true")){
-                            		Kit.setOverwrite(args[1], true);
+                            		plugin.getKitManager().setOverwrite(args[1], true);
                             	}else if (args[3].equalsIgnoreCase("off") || args[3].equalsIgnoreCase("false")){
-                            		Kit.setOverwrite(args[1], false);
+                            		plugin.getKitManager().setOverwrite(args[1], false);
                             	}else{
-                            		Kit.setOverwrite(args[1], false);
-                                    player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (Kit.getOverwrite(args[1]) ? "enabled." : "disabled.")));
+                            		plugin.getKitManager().setOverwrite(args[1], false);
+                                    player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (plugin.getKitManager().getOverwrite(args[1]) ? "enabled." : "disabled.")));
                             	}
                             	if (args.length > 4){
                                 	try{
-                                		Kit.setDelay(args[1], Integer.parseInt(args[4]));
+                                		plugin.getKitManager().setDelay(args[1], Integer.parseInt(args[4]));
                                 	}catch (Exception ex){
                                         player.sendMessage(Message.warning("Delay must be an integer."));
-                                        Kit.setDelay(args[1], 0);
+                                        plugin.getKitManager().setDelay(args[1], 0);
                                 	}
                             	}
                             }else{
-                                Kit.setOverwrite(args[1], false);
-                                Kit.setDelay(args[1], 0);
+                                plugin.getKitManager().setOverwrite(args[1], false);
+                                plugin.getKitManager().setDelay(args[1], 0);
                             }
                             player.setMetadata("editingKit", new FixedMetadataValue(plugin, false));
                             player.setMetadata("creatingKit", new FixedMetadataValue(plugin, true));
@@ -158,8 +156,8 @@ public class KitCommandExecutor implements CommandExecutor{
 	                }
 	            }else if (arg.equalsIgnoreCase("edit")){
                     if (player.hasPermission("kits.admin")){
-    	                if (Kit.exists(args[1])){
-                            Kit.edit(player, args[1]);
+    	                if (plugin.getKitManager().exists(args[1])){
+                            plugin.getKitManager().edit(player, args[1]);
                             player.setMetadata("editingKit", new FixedMetadataValue(plugin, true));
                             player.setMetadata("creatingKit", new FixedMetadataValue(plugin, false));
                         }else{
@@ -170,7 +168,7 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }else if (arg.equalsIgnoreCase("remove")){
                     if (player.hasPermission("kits.admin")){
-                        if (Kit.exists(args[1])){
+                        if (plugin.getKitManager().exists(args[1])){
                             plugin.getKitsConfig().set(args[1], null, false);
                             player.sendMessage(Message.info("Kit " + args[1] + " has been removed."));
                         }else{
@@ -181,19 +179,19 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }else if (arg.equalsIgnoreCase("overwrite")){
                     if (player.hasPermission("kits.admin")){
-                        if (Kit.exists(args[1])){
+                        if (plugin.getKitManager().exists(args[1])){
                             if (args.length > 2){
                             	if (args[2].equalsIgnoreCase("on") || args[2].equalsIgnoreCase("true")){
-                            		Kit.setOverwrite(args[1], true);
+                            		plugin.getKitManager().setOverwrite(args[1], true);
                                     player.sendMessage(Message.info("Kit " + args[1] + " overwrite enabled."));
                             	}else if (args[2].equalsIgnoreCase("off") || args[2].equalsIgnoreCase("false")){
-                            		Kit.setOverwrite(args[1], false);
+                            		plugin.getKitManager().setOverwrite(args[1], false);
                                     player.sendMessage(Message.info("Kit " + args[1] + " overwrite disabled."));
                             	}else{
-                                    player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (Kit.getOverwrite(args[1]) ? "enabled." : "disabled.")));
+                                    player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (plugin.getKitManager().getOverwrite(args[1]) ? "enabled." : "disabled.")));
                             	}
                             }else{
-                                player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (Kit.getOverwrite(args[1]) ? "enabled." : "disabled.")));
+                                player.sendMessage(Message.info("Kit " + args[1] + " overwrite is currently " + (plugin.getKitManager().getOverwrite(args[1]) ? "enabled." : "disabled.")));
                         	}
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
@@ -203,16 +201,16 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }else if (arg.equalsIgnoreCase("delay")){
                     if (player.hasPermission("kits.admin")){
-                        if (Kit.exists(args[1])){
+                        if (plugin.getKitManager().exists(args[1])){
                             if (args.length > 2){
                             	try{
-                            		Kit.setDelay(args[1], Integer.parseInt(args[2]));
+                            		plugin.getKitManager().setDelay(args[1], Integer.parseInt(args[2]));
                                     player.sendMessage(Message.info("Kit " + args[1] + " delay set to " + args[2] + "."));
                             	}catch (Exception ex){
                                     player.sendMessage(Message.warning("Delay must be an integer."));
                             	}
                             }else{
-                                player.sendMessage(Message.info("Kit " + args[1] + " delay is currently " + Kit.getDelay(args[1]) + "."));
+                                player.sendMessage(Message.info("Kit " + args[1] + " delay is currently " + plugin.getKitManager().getDelay(args[1]) + "."));
                         	}
                         }else{
                             player.sendMessage(Message.warning("Kit " + args[1] + " does not exist."));
@@ -225,19 +223,19 @@ public class KitCommandExecutor implements CommandExecutor{
                         Player receiver = Bukkit.getPlayerExact(args[1]);
                         
                         if (plugin.playerDelayed(receiver)){
-                            if (plugin.getRemainingTime(Kit.getDelay(arg), receiver) < 1){
+                            if (plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver) < 1){
                                 plugin.removeDelayedPlayer(receiver);
                             }else{
-                                int remaining = plugin.getRemainingTime(Kit.getDelay(arg), receiver);
+                                int remaining = plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning(receiver.getName() + " must wait " + remaining + seconds + " before spawning another kit."));
                                 return false;
                             }
                         }
                         
-                        if (Kit.exists(arg)){
+                        if (plugin.getKitManager().exists(arg)){
                             if (receiver != null){
-                                ItemStack[] itemList = Kit.getKit(arg);
+                                ItemStack[] itemList = plugin.getKitManager().getKit(arg);
                                 for (int i = 0; i < itemList.length; i ++){
                                     receiver.getInventory().setItem(i, itemList[i]);
                                 }
@@ -245,7 +243,7 @@ public class KitCommandExecutor implements CommandExecutor{
                                 receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
                                 player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
                                 
-                                if (!receiver.hasPermission("kits.bypassdelay") && plugin.getDelay(Kit.getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
+                                if (!receiver.hasPermission("kits.bypassdelay") && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
                             }else{
                                 player.sendMessage(Message.warning(args[1] + " is not online."));
                             }

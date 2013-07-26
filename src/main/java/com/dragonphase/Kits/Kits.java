@@ -10,11 +10,13 @@ import com.dragonphase.Kits.Commands.KitCommandExecutor;
 import com.dragonphase.Kits.Commands.KitsCommandExecutor;
 import com.dragonphase.Kits.Listeners.EventListener;
 import com.dragonphase.Kits.Util.FileManager;
+import com.dragonphase.Kits.Util.KitManager;
 import com.dragonphase.Kits.Util.Message;
 
 public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
     private FileManager config, kits;
+    private KitManager kitManager;
     
     private HashMap<String, Long> delayedPlayers;
 	
@@ -33,6 +35,7 @@ public class Kits extends JavaPlugin{
 		
         config = new FileManager(this, "config.yml");
         setKits(new FileManager(this, "kits.yml"));
+        kitManager = new KitManager(this);
         
         delayedPlayers = new HashMap<String, Long>();
         
@@ -90,5 +93,9 @@ public class Kits extends JavaPlugin{
 
     public void setKits(FileManager kits) {
         this.kits = kits;
+    }
+    
+    public KitManager getKitManager(){
+    	return kitManager;
     }
 }

@@ -1,7 +1,6 @@
 package com.dragonphase.Kits.Listeners;
 
 import com.dragonphase.Kits.Kits;
-import com.dragonphase.Kits.Util.Kit;
 import com.dragonphase.Kits.Util.Message;
 import java.util.logging.Logger;
 
@@ -94,18 +93,18 @@ public class EventListener implements Listener
                     String arg = sign.getLines()[i+1];
                     if (player.hasPermission("kits.spawn." + arg)){
                         if (plugin.playerDelayed(player)){
-                            if (plugin.getRemainingTime(Kit.getDelay(arg), player) < 1){
+                            if (plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), player) < 1){
                                 plugin.removeDelayedPlayer(player);
                             }else{
-                                int remaining = plugin.getRemainingTime(Kit.getDelay(arg), player);
+                                int remaining = plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), player);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
                                 return;
                             }
                         }
-                        if (Kit.exists(arg)){
-                            ItemStack[] itemList = Kit.getKit(arg);
-                            if (Kit.getOverwrite(arg)){
+                        if (plugin.getKitManager().exists(arg)){
+                            ItemStack[] itemList = plugin.getKitManager().getKit(arg);
+                            if (plugin.getKitManager().getOverwrite(arg)){
                                 for (int x = 0; x < itemList.length; x ++){
                                     player.getInventory().setItem(x, itemList[x]);
                                 }
@@ -121,7 +120,7 @@ public class EventListener implements Listener
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
 
-                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(Kit.getDelay(arg), 1) > 0)) plugin.addDelayedPlayer(player);
+                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0)) plugin.addDelayedPlayer(player);
                         }
                         else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
