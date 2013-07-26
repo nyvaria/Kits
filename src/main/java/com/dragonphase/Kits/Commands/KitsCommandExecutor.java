@@ -14,8 +14,7 @@ public class KitsCommandExecutor implements CommandExecutor{
 	public KitsCommandExecutor(Kits template) {
 		plugin = template;
 	}
-
-	@Override
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String command, String[] args) {
 		if (args.length > 0){
 			if (args[0].startsWith("r")){

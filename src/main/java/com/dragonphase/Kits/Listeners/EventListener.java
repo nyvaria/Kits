@@ -46,7 +46,7 @@ public class EventListener implements Listener
             if (((MetadataValue)player.getMetadata("editingKit").get(0)).asBoolean()){
                 String kit = inventory.getTitle();
 
-                plugin.getKitsConfig().set(kit, inventory.getContents(), false);
+                plugin.getKitsConfig().set(kit + ".kit", inventory.getContents(), false);
 
                 player.sendMessage(Message.info("Kit " + kit + " has been updated."));
                 player.setMetadata("editingKit", new FixedMetadataValue(plugin, Boolean.valueOf(false)));
@@ -56,7 +56,7 @@ public class EventListener implements Listener
             if (((MetadataValue)player.getMetadata("creatingKit").get(0)).asBoolean()){
                 String kit = inventory.getTitle();
 
-                plugin.getKitsConfig().set(kit, inventory.getContents(), false);
+                plugin.getKitsConfig().set(kit + ".kit", inventory.getContents(), false);
 
                 player.sendMessage(Message.info("Kit " + kit + " has been created."));
                 player.setMetadata("creatingKit", new FixedMetadataValue(plugin, Boolean.valueOf(false)));
@@ -94,10 +94,10 @@ public class EventListener implements Listener
                     String arg = sign.getLines()[i+1];
                     if (player.hasPermission("kits.spawn." + arg)){
                         if (plugin.playerDelayed(player)){
-                            if (plugin.getRemainingTime(player) < 1){
+                            if (plugin.getRemainingTime(Kit.getDelay(arg), player) < 1){
                                 plugin.removeDelayedPlayer(player);
                             }else{
-                                int remaining = plugin.getRemainingTime(player);
+                                int remaining = plugin.getRemainingTime(Kit.getDelay(arg), player);
                                 String seconds = remaining == 1 ? " second" : " seconds";
                                 player.sendMessage(Message.warning("You must wait " + remaining + seconds + " before spawning another kit."));
                                 return;
@@ -105,7 +105,7 @@ public class EventListener implements Listener
                         }
                         if (Kit.exists(arg)){
                             ItemStack[] itemList = Kit.getKit(arg);
-                            if (plugin.getOverwrite()){
+                            if (Kit.getOverwrite(arg)){
                                 for (int x = 0; x < itemList.length; x ++){
                                     player.getInventory().setItem(x, itemList[x]);
                                 }
@@ -121,7 +121,7 @@ public class EventListener implements Listener
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
 
-                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(1) > 0)) plugin.addDelayedPlayer(player);
+                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(Kit.getDelay(arg), 1) > 0)) plugin.addDelayedPlayer(player);
                         }
                         else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));

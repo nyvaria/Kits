@@ -22,12 +22,26 @@ public class Kit {
     }
     
     public static ItemStack[] getKit(String kitName){
-        return plugin.getKitsConfig().getInventory(kitName);
+        return plugin.getKitsConfig().getInventory(kitName + ".kit");
+    }
+    
+    public static int getDelay(String kitName){
+    	return plugin.getKitsConfig().getInt(kitName + ".delay");
+    }
+    
+    public static void setDelay(String kitName, int delay){
+    	plugin.getKitsConfig().set(kitName + ".delay", delay, false);
+    }
+    
+    public static boolean getOverwrite(String kitName){
+    	return plugin.getKitsConfig().getBoolean(kitName + ".overwrite");
+    }
+    
+    public static void setOverwrite(String kitName, boolean overwrite){
+    	plugin.getKitsConfig().set(kitName + ".overwrite", overwrite, false);
     }
 
     public static void create(Player player, String kitName, int bars) {
-        System.out.println(bars);
-        System.out.println(bars*9);
         Inventory inventory = plugin.getServer().createInventory(player, 9*(bars < 1 ? 1 : bars > 4 ? 4 : bars), kitName);
         player.openInventory(inventory);
     }
