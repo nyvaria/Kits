@@ -12,6 +12,7 @@ import com.dragonphase.Kits.Listeners.EventListener;
 import com.dragonphase.Kits.Util.FileManager;
 import com.dragonphase.Kits.Util.KitManager;
 import com.dragonphase.Kits.Util.Message;
+import com.dragonphase.Kits.metrics.Metrics;
 
 public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
@@ -43,6 +44,13 @@ public class Kits extends JavaPlugin{
 
         getCommand("kits").setExecutor(new KitsCommandExecutor(this));
         getCommand("kit").setExecutor(new KitCommandExecutor(this));
+        
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (Exception e) {
+            // Failed to submit the stats :-(
+        }
 	}
 	
 	public void reload(){
