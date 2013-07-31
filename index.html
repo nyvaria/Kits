@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Kits : Kits plugin" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Kits</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Dragonphase/Kits">View on GitHub</a>
+
+          <h1 id="project_title">Kits</h1>
+          <h2 id="project_tagline">Kits plugin</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Dragonphase/Kits/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Dragonphase/Kits/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="kits" class="anchor" href="#kits"><span class="octicon octicon-link"></span></a>Kits</h1>
+
+<p>Kits is a small but deceptively powerful plugin designed for the Bukkit API, with simple, easy-to-use commands and a Graphical User Interface provided during the creation of a kit.</p>
+
+<h1>
+<a name="commands" class="anchor" href="#commands"><span class="octicon octicon-link"></span></a>Commands</h1>
+
+<pre><code>/kits - Show all available kits.
+
+/kits reload - Reload Kits.
+
+/kit &lt;kitname&gt; - Spawn the specified kit.
+
+/kit &lt;kitname&gt; [playername] - Spawn the specified kit for the specified player.
+
+/kit create &lt;kitname&gt; - Create a kit with the specified name.
+
+/kit create &lt;kitname&gt; [bars] - Same as above with a specified number of inventory bars.
+
+/kit create &lt;kitname&gt; [bars] [overwrite] - Same as above with a specified overwrite variable (true / false).
+
+/kit create &lt;kitname&gt; [bars] [overwrite] [delay] - Same as above with a specified delay between kit spawning.
+
+/kit edit &lt;kitname&gt; - Edit the contents of the specified kit.
+
+/kit remove &lt;kitname&gt; - Remove the specified kit.
+
+/kit delay &lt;kitname&gt; - View the delay for the specified kit.
+
+/kit delay &lt;kitname&gt; [delay] - Change the delay for the specified kit.
+
+/kit overwrite &lt;kitname&gt; - View the overwrite settings for the specified kit.
+
+/kit overwrite &lt;kitname&gt; [on/true | off/false] - Change the overwrite settings for the specified kit.
+</code></pre>
+
+<h1>
+<a name="permissions" class="anchor" href="#permissions"><span class="octicon octicon-link"></span></a>Permissions</h1>
+
+<pre><code>kits.spawn.kitname - Players can spawn the specified kit.
+
+kits.spawn.others.kitname - Players can spawn the specified kit for another player.
+
+kits.admin - Players can issue Kits administration commands specified above.
+
+kits.bypassdelay.kitname - Players can bypass the delay on the specified kit.
+</code></pre>
+
+<p>To apply permissions to all kits instead of adding each individual kit, use the '*' wildcard in the place of "kitname".</p>
+
+<h1>
+<a name="signs" class="anchor" href="#signs"><span class="octicon octicon-link"></span></a>Signs</h1>
+
+<p>Kits can be spawned by right-clicking Kit signs. Kit signs are signs which are set up to display the following text:</p>
+
+<pre><code> [kit]
+kitname
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Kits maintained by <a href="https://github.com/Dragonphase">Dragonphase</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
