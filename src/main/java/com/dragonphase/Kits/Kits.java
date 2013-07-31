@@ -20,16 +20,10 @@ public class Kits extends JavaPlugin{
     private KitManager kitManager;
     
     private HashMap<String, Long> delayedPlayers;
-	
-	@Override
-	public void onDisable(){
-		logger.info(Message.message("Version " + getPluginVersion() + " disabled."));
-	}
 
 	@Override
 	public void onEnable(){
 		Message.setParent(this);
-		logger.info(Message.message("Version " + getPluginVersion() + " enabled."));
 		
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
@@ -49,7 +43,7 @@ public class Kits extends JavaPlugin{
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (Exception e) {
-            // Failed to submit the stats :-(
+        	logger.info(e.getMessage());
         }
 	}
 	
