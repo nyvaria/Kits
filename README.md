@@ -43,7 +43,9 @@ Permissions
 
     kits.admin - Players can issue Kits administration commands specified above.
 
-    kits.bypassdelay - Players can bypass the delay on all kits.
+    kits.bypassdelay.kitname - Players can bypass the delay on the specified kit.
+
+To apply permissions to all kits instead of adding each individual kit, use the '*' wildcard in the place of "kitname".
 
 Signs
 ====
