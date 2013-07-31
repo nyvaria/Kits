@@ -104,7 +104,7 @@ public class KitCommandExecutor implements CommandExecutor{
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
                             
-                            if (!player.hasPermission("kits.bypassdelay") && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(player);
+                            if (!player.hasPermission("kits.bypassdelay." + arg) && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(player);
                         }else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
                         }
@@ -243,7 +243,7 @@ public class KitCommandExecutor implements CommandExecutor{
                                 receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
                                 player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
                                 
-                                if (!receiver.hasPermission("kits.bypassdelay") && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
+                                if (!receiver.hasPermission("kits.bypassdelay." + arg) && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
                             }else{
                                 player.sendMessage(Message.warning(args[1] + " is not online."));
                             }

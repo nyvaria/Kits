@@ -65,7 +65,7 @@ public class EventListener implements Listener
         }
         catch (Exception ex)
         {
-            this.logger.info(ex.getLocalizedMessage());
+            logger.info(ex.getLocalizedMessage());
         }
     }
 
@@ -120,7 +120,7 @@ public class EventListener implements Listener
                             player.updateInventory();
                             player.sendMessage(Message.info("Kit " + arg + " spawned."));
 
-                            if ((!player.hasPermission("kits.bypassdelay")) && (plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0)) plugin.addDelayedPlayer(player);
+                            if ((!player.hasPermission("kits.bypassdelay." + arg)) && (plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0)) plugin.addDelayedPlayer(player);
                         }
                         else{
                             player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
