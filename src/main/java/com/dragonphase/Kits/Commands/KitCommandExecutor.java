@@ -10,6 +10,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import com.dragonphase.Kits.Kits;
 import com.dragonphase.Kits.Util.Message;
+import com.dragonphase.Kits.metrics.Metrics;
 
 public class KitCommandExecutor implements CommandExecutor{
 	
@@ -25,7 +26,7 @@ public class KitCommandExecutor implements CommandExecutor{
 	        if (args.length == 2){
 	            String arg = args[0];
 	            
-                Player receiver = Bukkit.getPlayerExact(args[1]);
+                Player receiver = getPlayer(args[1]);
                 
                 if (plugin.getKitManager().exists(arg)){
                     if (receiver != null){
@@ -46,6 +47,8 @@ public class KitCommandExecutor implements CommandExecutor{
                         receiver.updateInventory();
                         receiver.sendMessage(Message.info("Kit " + arg + " spawned by Console."));
                         sender.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
+                        
+                        addKitMetric();
                     }else{
                         sender.sendMessage(Message.warning(args[1] + " is not online."));
                     }
@@ -220,35 +223,48 @@ public class KitCommandExecutor implements CommandExecutor{
                     }
                 }else{
                     if (player.hasPermission("kits.others.spawn." + arg)){
-                        Player receiver = Bukkit.getPlayerExact(args[1]);
-                        
-                        if (plugin.playerDelayed(receiver)){
-                            if (plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver) < 1){
-                                plugin.removeDelayedPlayer(receiver);
-                            }else{
-                                int remaining = plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver);
-                                String seconds = remaining == 1 ? " second" : " seconds";
-                                player.sendMessage(Message.warning(receiver.getName() + " must wait " + remaining + seconds + " before spawning another kit."));
-                                return false;
-                            }
-                        }
-                        
-                        if (plugin.getKitManager().exists(arg)){
-                            if (receiver != null){
-                                ItemStack[] itemList = plugin.getKitManager().getKit(arg);
-                                for (int i = 0; i < itemList.length; i ++){
-                                    receiver.getInventory().setItem(i, itemList[i]);
-                                }
-                                receiver.updateInventory();
-                                receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
-                                player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
-                                
-                                if (!receiver.hasPermission("kits.bypassdelay." + arg) && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
-                            }else{
-                                player.sendMessage(Message.warning(args[1] + " is not online."));
-                            }
-                        }else{
-                            player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
+                        Player receiver = getPlayer(args[1]);
+
+                        if (receiver != null){
+	                        if (plugin.playerDelayed(receiver)){
+	                            if (plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver) < 1){
+	                                plugin.removeDelayedPlayer(receiver);
+	                            }else{
+	                                int remaining = plugin.getRemainingTime(plugin.getKitManager().getDelay(arg), receiver);
+	                                String seconds = remaining == 1 ? " second" : " seconds";
+	                                player.sendMessage(Message.warning(receiver.getName() + " must wait " + remaining + seconds + " before spawning another kit."));
+	                                return false;
+	                            }
+	                        }
+	                        
+	                        if (plugin.getKitManager().exists(arg)){
+	                                ItemStack[] itemList = plugin.getKitManager().getKit(arg);
+
+	                                if (plugin.getKitManager().getOverwrite(arg)){
+	                                    for (int i = 0; i < itemList.length; i ++){
+	                                        receiver.getInventory().setItem(i, itemList[i]);
+	                                    }
+	                                }else{
+	                                    try{
+	                                        for (int i = 0; i < itemList.length; i ++){
+	                                            receiver.getInventory().addItem(itemList[i]);
+	                                        }
+	                                    }catch (Exception ex){
+	                                        if (receiver.getInventory().firstEmpty() == -1) sender.sendMessage(Message.warning(receiver.getName() + " didn't have enough space in their inventory to spawn the entire kit."));
+	                                    }
+	                                }
+	                                receiver.updateInventory();
+	                                receiver.sendMessage(Message.info("Kit " + arg + " spawned by " + player.getName() + "."));
+	                                player.sendMessage(Message.info("Kit " + arg + " spawned for " + receiver.getName() + "."));
+	                                
+	                                if (!receiver.hasPermission("kits.bypassdelay." + arg) && plugin.getDelay(plugin.getKitManager().getDelay(arg), 1) > 0) plugin.addDelayedPlayer(receiver);
+	                                
+	                                addKitMetric();
+	                        }else{
+	                            player.sendMessage(Message.warning("Kit " + arg + " does not exist."));
+	                        }
+	                    }else{
+                            player.sendMessage(Message.warning(args[1] + " is not online."));
                         }
                     }else{
                         player.sendMessage(Message.warning("Incorrect Permissions."));
@@ -257,5 +273,31 @@ public class KitCommandExecutor implements CommandExecutor{
 	        }
 	    }
 		return false;
+	}
+	
+	public void addKitMetric(){
+		if (!plugin.getMetrics().isOptOut()){
+			plugin.getMetrics().createGraph("Number of Kits Spawned").addPlotter(new Metrics.Plotter("Kit Spawn") {
+				
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Bukkit's default getPlayer method does not search the entire player's name for a substring being searched for, whereas this method does.
+	 * @param name The player's name
+	 * @return the matched player, or null if no match
+	 */
+	public Player getPlayer(String playerName){
+		for (Player player : Bukkit.getOnlinePlayers()){
+			if (player.getName().toLowerCase().contains(playerName.toLowerCase())){
+				return player;
+			}
+		}
+		return null;
 	}
 }

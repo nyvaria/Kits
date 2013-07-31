@@ -18,6 +18,7 @@ public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
     private FileManager config, kits;
     private KitManager kitManager;
+    private Metrics metrics;
     
     private HashMap<String, Long> delayedPlayers;
 
@@ -40,10 +41,10 @@ public class Kits extends JavaPlugin{
         getCommand("kit").setExecutor(new KitCommandExecutor(this));
         
         try {
-            Metrics metrics = new Metrics(this);
+            metrics = new Metrics(this);
             metrics.start();
         } catch (Exception e) {
-        	logger.info(e.getMessage());
+        	metrics = null;
         }
 	}
 	
@@ -99,5 +100,9 @@ public class Kits extends JavaPlugin{
     
     public KitManager getKitManager(){
     	return kitManager;
+    }
+    
+    public Metrics getMetrics(){
+    	return metrics;
     }
 }

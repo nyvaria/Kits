@@ -22,7 +22,7 @@ import org.bukkit.metadata.MetadataValue;
 public class EventListener implements Listener
 {
     public final Logger logger = Logger.getLogger("Minecraft");
-    public static Kits plugin;
+    private Kits plugin;
 
     public EventListener(Kits instance)
     {
