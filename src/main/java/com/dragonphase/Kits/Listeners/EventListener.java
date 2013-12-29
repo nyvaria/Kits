@@ -68,7 +68,8 @@ public class EventListener implements Listener
             logger.info(ex.getLocalizedMessage());
         }
     }
-
+    
+    /*
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
@@ -84,7 +85,9 @@ public class EventListener implements Listener
             event.setUseInteractedBlock(Result.DENY);
         }
     }
+    */
     
+    /*
     @SuppressWarnings("deprecation")
     public void handleSignClick(Player player, Sign sign){
         for (int i = 0; i < 4; i++){
@@ -135,4 +138,5 @@ public class EventListener implements Listener
             }
         }
     }
+    */
 }

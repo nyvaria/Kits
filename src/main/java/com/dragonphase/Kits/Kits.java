@@ -12,13 +12,13 @@ import com.dragonphase.Kits.Listeners.EventListener;
 import com.dragonphase.Kits.Util.FileManager;
 import com.dragonphase.Kits.Util.KitManager;
 import com.dragonphase.Kits.Util.Message;
-import com.dragonphase.Kits.metrics.Metrics;
+//import com.dragonphase.Kits.metrics.Metrics;
 
 public class Kits extends JavaPlugin{
 	public final Logger logger = Logger.getLogger("Minecraft");
     private FileManager config, kits;
     private KitManager kitManager;
-    private Metrics metrics;
+    //private Metrics metrics;
     
     private HashMap<String, Long> delayedPlayers;
 
@@ -40,12 +40,14 @@ public class Kits extends JavaPlugin{
         getCommand("kits").setExecutor(new KitsCommandExecutor(this));
         getCommand("kit").setExecutor(new KitCommandExecutor(this));
         
+        /*
         try {
             metrics = new Metrics(this);
             metrics.start();
         } catch (Exception e) {
         	metrics = null;
         }
+        */
 	}
 	
 	public void reload(){
@@ -102,7 +104,9 @@ public class Kits extends JavaPlugin{
     	return kitManager;
     }
     
+    /*
     public Metrics getMetrics(){
     	return metrics;
     }
+    */
 }
